@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepOrange,
       ),
       home: BlocProvider(
-        create: (_) => getIt<HomeCubit>(),
+        create: (context) => getIt<HomeAppCubit>(),
         child: const HomePage(),
       ),
     );

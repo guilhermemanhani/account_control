@@ -3,7 +3,7 @@ import 'package:account_control/feature/home/infra/datasource/account_info_datas
 
 class AccountInfoDatasourceImpl implements AccountInfoDatasource {
   @override
-  Future<List<AccountInfoEntity>> getMovies() {
+  Future<List<AccountInfoEntity>> getAccountInfo() {
     // TODO: implement getMovies
     throw UnimplementedError();
   }

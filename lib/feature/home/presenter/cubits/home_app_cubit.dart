@@ -2,11 +2,11 @@ import 'package:account_control/feature/home/domain/usecases/get_account_info_us
 import 'package:account_control/feature/home/presenter/cubits/home_state.dart';
 import 'package:bloc/bloc.dart';
 
-class HomeCubit extends Cubit<HomeState> {
-  final GetAccountInfoUsecase getAccountInfoUsecase;
-  HomeCubit({
+class HomeAppCubit extends Cubit<HomeState> {
+  final GetAccountInfoUsecase _getAccountInfoUsecase;
+  HomeAppCubit({
     required GetAccountInfoUsecase getAccountUsecase,
-  })  : getAccountInfoUsecase = getAccountUsecase,
+  })  : _getAccountInfoUsecase = getAccountUsecase,
         super(HomeInitialState());
   Future<void> loadAccounts() async {
     // emit(const MoviesLoadingState());
