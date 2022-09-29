@@ -1,0 +1,10 @@
+import 'package:account_control/feature/home/domain/entities/account_info_entity.dart';
+import 'package:account_control/feature/home/infra/datasource/account_info_datasource.dart';
+
+class AccountInfoDatasourceImpl implements AccountInfoDatasource {
+  @override
+  Future<List<AccountInfoEntity>> getMovies() {
+    // TODO: implement getMovies
+    throw UnimplementedError();
+  }
+}
