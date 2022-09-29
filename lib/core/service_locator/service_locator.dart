@@ -1,5 +1,6 @@
 import 'package:account_control/feature/home/domain/repositories/account_info_repository.dart';
 import 'package:account_control/feature/home/domain/usecases/get_account_info_usecase.dart';
+import 'package:account_control/feature/home/external/datasource/account_info_datasource_impl.dart';
 import 'package:account_control/feature/home/infra/datasource/account_info_datasource.dart';
 import 'package:account_control/feature/home/infra/repositories/account_info_repository_impl.dart';
 import 'package:account_control/feature/home/presenter/cubits/home_app_cubit.dart';
@@ -12,9 +13,9 @@ void initServiceLocator() {
 
   //datasource
   getIt.registerSingleton<AccountInfoDatasource>(
-    MoviesDatasourceImpl(
-      dio: getIt(),
-    ),
+    AccountInfoDatasourceImpl(
+        // dio: getIt(),
+        ),
   );
 
   getIt.registerSingleton<AccountInfoRepository>(
@@ -36,7 +37,7 @@ void initServiceLocator() {
 
   getIt.registerFactory<HomeAppCubit>(
     () => HomeAppCubit(
-      getAccountUsecase: getIt(),
+      usecase: getIt(),
     ),
   );
 }

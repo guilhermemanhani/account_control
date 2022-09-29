@@ -3,11 +3,13 @@ import 'package:account_control/feature/home/presenter/cubits/home_state.dart';
 import 'package:bloc/bloc.dart';
 
 class HomeAppCubit extends Cubit<HomeState> {
-  final GetAccountInfoUsecase _getAccountInfoUsecase;
-  HomeAppCubit({
-    required GetAccountInfoUsecase getAccountUsecase,
-  })  : _getAccountInfoUsecase = getAccountUsecase,
-        super(HomeInitialState());
+  final GetAccountInfoUsecase _usecase;
+
+  HomeAppCubit({required GetAccountInfoUsecase usecase})
+      : _usecase = usecase,
+        super(
+          HomeInitialState(),
+        );
   Future<void> loadAccounts() async {
     // emit(const MoviesLoadingState());
     // try {
