@@ -1,4 +1,5 @@
 import 'package:account_control/core/service_locator/service_locator.dart';
+import 'package:account_control/feature/home/presenter/cubits/home_app_cubit.dart';
 import 'package:account_control/feature/home/presenter/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+        primarySwatch: Colors.blueGrey,
       ),
       home: BlocProvider(
         create: (_) => getIt<HomeAppCubit>(),
