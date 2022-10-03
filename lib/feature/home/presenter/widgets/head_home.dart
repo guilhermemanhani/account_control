@@ -36,30 +36,26 @@ class HeadHome extends StatelessWidget {
               top: 16,
             ),
             height: 80,
-            // child: Observer(
-            //   builder: (_) {
-            //     return Column(
-            //       children: [
-            //         const Text(
-            //           "Total em caixa",
-            //           style: TextStyle(
-            //             color: Colors.white,
-            //             fontSize: 14,
-            //             fontWeight: FontWeight.w600,
-            //           ),
-            //         ),
-            //         Text(
-            //           value,
-            //           style: const TextStyle(
-            //             color: Colors.white,
-            //             fontSize: 26,
-            //             fontWeight: FontWeight.w600,
-            //           ),
-            //         ),
-            //       ],
-            //     );
-            //   },
-            // ),
+          ),
+          Column(
+            children: [
+              const Text(
+                "Total em caixa",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                value,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 26,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ),
         ],
       ),
