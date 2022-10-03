@@ -1,5 +1,4 @@
 import 'package:account_control/core/service_locator/service_locator.dart';
-import 'package:account_control/core/ui/uiconfig.dart';
 import 'package:account_control/feature/home/presenter/cubits/home_app_cubit.dart';
 import 'package:account_control/feature/home/presenter/page/home_page.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +15,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: UiConfig.title,
-      theme: UiConfig.theme,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blueGrey,
+      ),
       home: BlocProvider(
         create: (_) => getIt<HomeAppCubit>(),
         child: const HomePage(),

@@ -1,3 +1,4 @@
+import 'package:account_control/feature/expense/presenter/page/expense_page.dart';
 import 'package:account_control/feature/home/presenter/cubits/home_app_cubit.dart';
 import 'package:account_control/feature/home/presenter/cubits/home_state.dart';
 import 'package:account_control/feature/home/presenter/widgets/container_budget.dart';
@@ -153,7 +154,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: () async {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => MovieDetailsPage(movieEntity: movie),
+              builder: (_) => const ExpensePage(),
             ),
           );
           // controller.loadHome();

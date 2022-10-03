@@ -1,45 +1,100 @@
-import 'package:account_control/feature/home/domain/entities/account_info_entity.dart';
+import 'package:account_control/feature/expense/domain/entities/account_entity.dart';
+import 'package:account_control/feature/expense/domain/entities/bank_entity.dart';
+import 'package:account_control/feature/expense/domain/entities/local_entity.dart';
+import 'package:account_control/feature/expense/domain/entities/reasons_entity.dart';
 import 'package:flutter/foundation.dart';
 
-abstract class HomeState {
-  const HomeState();
+abstract class ExpenseState {
+  const ExpenseState();
 }
 
-class HomeInitialState extends HomeState {}
+class ExpenseInitialState extends ExpenseState {}
 
-//getHome
-class HomeLoadingState extends HomeState {
-  const HomeLoadingState();
+//getExpense
+class ExpenseLoadingState extends ExpenseState {
+  const ExpenseLoadingState();
 }
 
-class HomeLoadedState extends HomeState {
-  final List<AccountInfoEntity> home;
+class ExpenseAccountLoadedState extends ExpenseState {
+  final List<AccountEntity> expenseAccount;
 
-  HomeLoadedState({required this.home});
+  ExpenseAccountLoadedState({required this.expenseAccount});
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is HomeLoadedState && listEquals(other.home, home);
+    return other is ExpenseAccountLoadedState &&
+        listEquals(other.expenseAccount, expenseAccount);
   }
 
   @override
-  int get hashCode => home.hashCode;
+  int get hashCode => expenseAccount.hashCode;
 }
 
-class HomeEmptyState extends HomeState {}
+class ExpenseBankLoadedState extends ExpenseState {
+  final List<BankEntity> expenseBank;
 
-class HomeErrorState extends HomeState {
-  final String errorMessage;
-
-  HomeErrorState({required this.errorMessage});
+  ExpenseBankLoadedState({required this.expenseBank});
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is HomeErrorState && other.errorMessage == errorMessage;
+    return other is ExpenseBankLoadedState &&
+        listEquals(other.expenseBank, expenseBank);
+  }
+
+  @override
+  int get hashCode => expenseBank.hashCode;
+}
+
+class ExpenseLocalLoadedState extends ExpenseState {
+  final List<LocalEntity> expenseLocal;
+
+  ExpenseLocalLoadedState({required this.expenseLocal});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ExpenseLocalLoadedState &&
+        listEquals(other.expenseLocal, expenseLocal);
+  }
+
+  @override
+  int get hashCode => expenseLocal.hashCode;
+}
+
+class ExpenseReasonsLoadedState extends ExpenseState {
+  final List<ReasonsEntity> expenseReasons;
+
+  ExpenseReasonsLoadedState({required this.expenseReasons});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ExpenseReasonsLoadedState &&
+        listEquals(other.expenseReasons, expenseReasons);
+  }
+
+  @override
+  int get hashCode => expenseReasons.hashCode;
+}
+
+class ExpenseEmptyState extends ExpenseState {}
+
+class ExpenseErrorState extends ExpenseState {
+  final String errorMessage;
+
+  ExpenseErrorState({required this.errorMessage});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ExpenseErrorState && other.errorMessage == errorMessage;
   }
 
   @override
@@ -47,8 +102,8 @@ class HomeErrorState extends HomeState {
 }
 
 //getMovieInfo
-class MovieInfoLoadingState extends HomeState {}
+class MovieInfoLoadingState extends ExpenseState {}
 
-class MovieInfoLoadedState extends HomeState {}
+class MovieInfoLoadedState extends ExpenseState {}
 
-class MovieInfoErrorState extends HomeState {}
+class MovieInfoErrorState extends ExpenseState {}

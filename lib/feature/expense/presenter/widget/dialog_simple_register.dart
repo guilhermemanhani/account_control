@@ -1,3 +1,6 @@
+import 'package:account_control/core/ui/extensions/theme_extension.dart';
+import 'package:account_control/core/ui/widgets/dentrodobolso_text_form_field.dart';
+import 'package:account_control/core/ui/widgets/text_icon_button.dart';
 import 'package:flutter/material.dart';
 
 class DialogSimpleRegister extends StatefulWidget {
@@ -20,8 +23,7 @@ class DialogSimpleRegister extends StatefulWidget {
   State<DialogSimpleRegister> createState() => _DialogSimpleRegisterState();
 }
 
-class _DialogSimpleRegisterState
-    extends ModularState<DialogSimpleRegister, ExpenseEntryController> {
+class _DialogSimpleRegisterState extends State<DialogSimpleRegister> {
   final _formKey = GlobalKey<FormState>();
   final _simplesTextEC = TextEditingController();
 
@@ -65,7 +67,7 @@ class _DialogSimpleRegisterState
               controller: _simplesTextEC,
               textInputType: TextInputType.text,
               textInputAction: TextInputAction.done,
-              validator: Validatorless.required('Valor é obrigatório'),
+              // validator: Validatorless.required('Valor é obrigatório'),
             ),
           ],
         ),

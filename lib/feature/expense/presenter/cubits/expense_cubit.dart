@@ -1,22 +1,25 @@
+import 'package:account_control/feature/expense/domain/entities/account_entity.dart';
+import 'package:account_control/feature/expense/presenter/cubits/expense_state.dart';
 import 'package:account_control/feature/home/domain/usecases/get_account_info_usecase.dart';
-import 'package:account_control/feature/home/presenter/cubits/home_state.dart';
 import 'package:bloc/bloc.dart';
 
-class HomeAppCubit extends Cubit<HomeState> {
+class ExpenseCubit extends Cubit<ExpenseState> {
   final GetAccountInfoUsecase _usecase;
 
-  HomeAppCubit({required GetAccountInfoUsecase usecase})
-      : _usecase = usecase,
+  ExpenseCubit({
+    required GetAccountInfoUsecase usecase,
+  })  : _usecase = usecase,
         super(
-          HomeInitialState(),
+          ExpenseInitialState(),
         );
   Future<void> loadAccounts() async {
-    // emit(const MoviesLoadingState());
-    // try {
-    //   final result = await getMoviesUsecase.call();
-    //   emit(MoviesLoadedState(movies: result));
-    // } on MovieFailure catch (error) {
-    //   emit(MoviesErrorState(errorMessage: error.errorMessage));
-    // }
+    emit(const ExpenseLoadingState());
+    try {
+      final List<AccountEntity> result = [];
+      // await getMoviesUsecase.call();
+      emit(ExpenseAccountLoadedState(expenseAccount: result));
+    } catch (error) {
+      emit(ExpenseErrorState(errorMessage: error.toString()));
+    }
   }
 }
