@@ -1,13 +1,13 @@
-class ReasonsEntity {
+class ReasonEntity {
   final int id;
   final String motivo;
-  ReasonsEntity({
+  ReasonEntity({
     required this.id,
     required this.motivo,
   });
 
   @override
-  bool operator ==(covariant ReasonsEntity other) {
+  bool operator ==(covariant ReasonEntity other) {
     if (identical(this, other)) return true;
 
     return other.id == id && other.motivo == motivo;

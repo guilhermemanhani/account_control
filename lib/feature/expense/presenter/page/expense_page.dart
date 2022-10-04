@@ -6,7 +6,7 @@ import 'package:account_control/core/ui/widgets/text_icon_button.dart';
 import 'package:account_control/feature/expense/domain/entities/account_entity.dart';
 import 'package:account_control/feature/expense/domain/entities/bank_entity.dart';
 import 'package:account_control/feature/expense/domain/entities/local_entity.dart';
-import 'package:account_control/feature/expense/domain/entities/reasons_entity.dart';
+import 'package:account_control/feature/expense/domain/entities/reason_entity.dart';
 import 'package:account_control/feature/expense/presenter/cubits/expense_cubit.dart';
 import 'package:account_control/feature/expense/presenter/cubits/expense_state.dart';
 import 'package:account_control/feature/expense/presenter/widget/dialog_account.dart';
@@ -40,11 +40,11 @@ class _ExpensePageState extends State<ExpensePage> {
   DateTime _selectedDate = DateTime.now();
   String _selectedBank = '';
   String _selectedAccount = '';
-  String _selectedReasons = '';
+  String _selectedReason = '';
   String _selectedLocal = '';
   List<AccountEntity> listAccount = [];
   List<LocalEntity> listLocal = [];
-  List<ReasonsEntity> listReasons = [];
+  List<ReasonEntity> listReasons = [];
   List<BankEntity> listBank = [];
 
   // final reactionDisposer = <ReactionDisposer>[];
@@ -83,10 +83,9 @@ class _ExpensePageState extends State<ExpensePage> {
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
-          child: Container(
-            padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
-            width: 1,
-            height: 16 - kToolbarHeight,
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -135,17 +134,17 @@ class _ExpensePageState extends State<ExpensePage> {
                 const SizedBox(
                   height: 16,
                 ),
-                Row(
-                  children: [
-                    BlocBuilder<ExpenseCubit, ExpenseState>(
-                      builder: (context, state) {
-                        if (state is ExpenseLoadingState) {
-                          return const Center(
-                            key: Key('circular-progress-indicator'),
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (state is ExpenseAccountLoadedState) {
-                          return DentrodobolsoDropDownButton(
+                BlocBuilder<ExpenseCubit, ExpenseState>(
+                  builder: (context, state) {
+                    if (state is ExpenseLoadingState) {
+                      return const Center(
+                        key: Key('circular-progress-indicator'),
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is ExpenseAccountLoadedState) {
+                      return Row(
+                        children: [
+                          DentrodobolsoDropDownButton(
                             widget: DropdownButton<String>(
                               isExpanded: true,
                               underline: Container(
@@ -172,130 +171,152 @@ class _ExpensePageState extends State<ExpensePage> {
                                 },
                               ).toList(),
                             ),
-                          );
-                          // return ListView.builder(
-                          //   key: const Key('movies-list'),
-                          //   itemCount: state.movies.length,
-                          //   itemBuilder: (_, index) {
-                          //     final movie = state.movies[index];
-                          //     return _MovieTile(movie: movie);
-                          //   },
-                          // );
-                        } else if (state is ExpenseErrorState) {
-                          return Center(
-                            key: const Key('expense-error-message'),
-                            child: Text(state.errorMessage),
-                          );
-                        }
-                        return const SizedBox();
-                      },
-                    ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    IconButton(
-                      onPressed: () => _showDialogAccount(),
-                      icon: const Icon(Icons.add),
-                    ),
-                  ],
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          IconButton(
+                            onPressed: () => _showDialogAccount(),
+                            icon: const Icon(Icons.add),
+                          ),
+                        ],
+                      );
+                    } else if (state is ExpenseErrorState) {
+                      return Center(
+                        key: const Key('expense-error-message'),
+                        child: Text(state.errorMessage),
+                      );
+                    }
+                    return const SizedBox();
+                  },
                 ),
                 const SizedBox(
                   height: 16,
                 ),
-                Row(
-                  children: [
-                    DentrodobolsoDropDownButton(
-                      widget: DropdownButton<String>(
-                        underline: Container(
-                          width: double.infinity,
-                        ),
-                        isExpanded: true,
-                        icon: const Icon(
-                          Icons.keyboard_arrow_down_sharp,
-                        ),
-                        hint: const Text('Local'),
-                        value: _selectedLocal,
-                        // isDense: true,
-                        onChanged: (value) => setState(() {
-                          _selectedLocal = value!;
-                        }),
-                        items: controller.listLocal.map(
-                          (LocalEntity map) {
-                            return DropdownMenuItem<String>(
-                              onTap: () => controller.setIdLocal(map.id),
-                              value: map.id.toString(),
-                              child: Text(
-                                map.local,
+                BlocBuilder<ExpenseCubit, ExpenseState>(
+                  builder: (context, state) {
+                    if (state is ExpenseLoadingState) {
+                      return const Center(
+                        key: Key('circular-progress-indicator'),
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is ExpenseLocalLoadedState) {
+                      return Row(
+                        children: [
+                          DentrodobolsoDropDownButton(
+                            widget: DropdownButton<String>(
+                              isExpanded: true,
+                              underline: Container(
+                                width: double.infinity,
                               ),
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    DialogReasonsAdd(
-                      message: 'Local já cadastrados:',
-                      messageHighlighted: controller.listLocal
-                          .map((local) => local.local)
-                          .join(', '),
-                      nameForm: 'Local',
-                      title: 'Adicione um novo local',
-                      saveController: (val) {
-                        // controller.saveLocal(val);
-                      },
-                    ),
-                  ],
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down_sharp,
+                              ),
+                              hint: const Text('Local'),
+                              value: _selectedLocal,
+                              onChanged: (value) => setState(() {
+                                _selectedLocal = value!;
+                              }),
+                              items: state.expenseLocal.map(
+                                (LocalEntity map) {
+                                  return DropdownMenuItem<String>(
+                                    value: map.id.toString(),
+                                    child: Text(
+                                      map.local,
+                                    ),
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          DialogReasonsAdd(
+                            message: 'Local já cadastrados:',
+                            messageHighlighted: state.expenseLocal
+                                .map((local) => local.local)
+                                .join(', '),
+                            nameForm: 'Local',
+                            title: 'Adicione um novo local',
+                            saveController: (val) {
+                              // controller.saveLocal(val);
+                            },
+                          ),
+                        ],
+                      );
+                    } else if (state is ExpenseErrorState) {
+                      return Center(
+                        key: const Key('expense-error-message'),
+                        child: Text(state.errorMessage),
+                      );
+                    }
+                    return const SizedBox();
+                  },
                 ),
                 const SizedBox(
                   height: 16,
                 ),
-                Row(
-                  children: [
-                    DentrodobolsoDropDownButton(
-                      widget: DropdownButton<String>(
-                        underline: Container(
-                          width: double.infinity,
-                        ),
-                        isExpanded: true,
-                        icon: const Icon(
-                          Icons.keyboard_arrow_down_sharp,
-                        ),
-                        hint: const Text('Motivo'),
-                        value: _selectedReasons,
-                        // isDense: true,
-                        onChanged: (value) => setState(() {
-                          _selectedReasons = value!;
-                        }),
-                        items: controller.listReasons.map(
-                          (ReasonsEntity map) {
-                            return DropdownMenuItem<String>(
-                              onTap: () => controller.setIdReasonst(map.id),
-                              value: map.id.toString(),
-                              child: Text(
-                                map.motivo,
+                BlocBuilder<ExpenseCubit, ExpenseState>(
+                  builder: (context, state) {
+                    if (state is ExpenseLoadingState) {
+                      return const Center(
+                        key: Key('circular-progress-indicator'),
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is ExpenseReasonLoadedState) {
+                      return Row(
+                        children: [
+                          DentrodobolsoDropDownButton(
+                            widget: DropdownButton<String>(
+                              isExpanded: true,
+                              underline: Container(
+                                width: double.infinity,
                               ),
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    DialogReasonsAdd(
-                      message: 'Motivo já cadastrados:',
-                      messageHighlighted: controller.listReasons
-                          .map((reasons) => reasons.motivo)
-                          .join(', '),
-                      nameForm: 'Motivo',
-                      title: 'Adicione um novo motivo',
-                      saveController: (val) {
-                        controller.saveReasons(val);
-                      },
-                    ),
-                  ],
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down_sharp,
+                              ),
+                              hint: const Text('Motivo'),
+                              value: _selectedReason,
+                              onChanged: (value) => setState(() {
+                                _selectedReason = value!;
+                              }),
+                              items: state.expenseReason.map(
+                                (ReasonEntity map) {
+                                  return DropdownMenuItem<String>(
+                                    value: map.id.toString(),
+                                    child: Text(
+                                      map.motivo,
+                                    ),
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          DialogReasonsAdd(
+                            message: 'Motivos já cadastrados:',
+                            messageHighlighted: state.expenseReason
+                                .map((reason) => reason.motivo)
+                                .join(', '),
+                            nameForm: 'Motivo',
+                            title: 'Adicione um novo motivo',
+                            saveController: (val) {
+                              // controller.saveReason(val);
+                            },
+                          ),
+                        ],
+                      );
+                    } else if (state is ExpenseErrorState) {
+                      return Center(
+                        key: const Key('expense-error-message'),
+                        child: Text(state.errorMessage),
+                      );
+                    }
+                    return const SizedBox();
+                  },
                 ),
               ],
             ),
@@ -324,7 +345,7 @@ class _ExpensePageState extends State<ExpensePage> {
         return DialogAccount(
           message: 'Bancos já cadastrados:',
           messageHighlighted:
-              controller.listBank.map((bank) => bank.instituicao).join(', '),
+              listBank.map((bank) => bank.instituicao).join(', '),
           title: 'Deseja adicionar uma conta ou um banco?',
           onTapBanco: () => _dialogSimpleRegisterBank(),
           onTapConta: () => _showDialogRegisterAccount(),
@@ -383,10 +404,12 @@ class _ExpensePageState extends State<ExpensePage> {
                       onChanged: (value) => setState(() {
                         _selectedBank = value!;
                       }),
-                      items: controller.listBank.map(
+                      items: listBank.map(
                         (BankEntity map) {
                           return DropdownMenuItem<String>(
-                            onTap: () => controller.setIdBank(map.id),
+                            onTap: () => setState(() {
+                              _selectedBank = map.id.toString();
+                            }),
                             value: map.id.toString(),
                             child: Text(
                               map.instituicao,
@@ -421,8 +444,8 @@ class _ExpensePageState extends State<ExpensePage> {
                     _formKeyPopup.currentState?.validate() ?? false;
                 if (formValid) {
                   Navigator.pop(context);
-                  controller.saveAccont(
-                      _numAccountEC.text, _controllerMoneyAccount.numberValue);
+                  // controller.saveAccont(
+                  //     _numAccountEC.text, _controllerMoneyAccount.numberValue);
                 }
 
                 // widget.onTapSave();
@@ -458,9 +481,9 @@ class _ExpensePageState extends State<ExpensePage> {
         return DialogSimpleRegister(
           message: 'Bancos já cadastrados:',
           messageHighlighted:
-              controller.listBank.map((bank) => bank.instituicao).join(', '),
+              listBank.map((bank) => bank.instituicao).join(', '),
           ontap: (val) {
-            controller.saveBank(val);
+            debugPrint('salvarbanco');
           },
           nameForm: 'Instituição',
           title: 'Adicione um novo banco',

@@ -1,3 +1,4 @@
+import 'package:account_control/feature/expense/presenter/cubits/expense_cubit.dart';
 import 'package:account_control/feature/expense/presenter/page/expense_page.dart';
 import 'package:account_control/feature/home/presenter/cubits/home_app_cubit.dart';
 import 'package:account_control/feature/home/presenter/cubits/home_state.dart';
@@ -5,6 +6,8 @@ import 'package:account_control/feature/home/presenter/widgets/container_budget.
 import 'package:account_control/feature/home/presenter/widgets/head_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/service_locator/service_locator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -151,12 +154,16 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
+        onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => const ExpensePage(),
+              builder: (_) => BlocProvider(
+                create: (context) => getIt<ExpenseCubit>(),
+                child: const ExpensePage(),
+              ),
             ),
           );
+
           // controller.loadHome();
         },
         child: const Icon(Icons.payment),

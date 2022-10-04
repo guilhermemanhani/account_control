@@ -1,7 +1,7 @@
 import 'package:account_control/feature/expense/domain/entities/account_entity.dart';
 import 'package:account_control/feature/expense/domain/entities/bank_entity.dart';
 import 'package:account_control/feature/expense/domain/entities/local_entity.dart';
-import 'package:account_control/feature/expense/domain/entities/reasons_entity.dart';
+import 'package:account_control/feature/expense/domain/entities/reason_entity.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class ExpenseState {
@@ -66,21 +66,21 @@ class ExpenseLocalLoadedState extends ExpenseState {
   int get hashCode => expenseLocal.hashCode;
 }
 
-class ExpenseReasonsLoadedState extends ExpenseState {
-  final List<ReasonsEntity> expenseReasons;
+class ExpenseReasonLoadedState extends ExpenseState {
+  final List<ReasonEntity> expenseReason;
 
-  ExpenseReasonsLoadedState({required this.expenseReasons});
+  ExpenseReasonLoadedState({required this.expenseReason});
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is ExpenseReasonsLoadedState &&
-        listEquals(other.expenseReasons, expenseReasons);
+    return other is ExpenseReasonLoadedState &&
+        listEquals(other.expenseReason, expenseReason);
   }
 
   @override
-  int get hashCode => expenseReasons.hashCode;
+  int get hashCode => expenseReason.hashCode;
 }
 
 class ExpenseEmptyState extends ExpenseState {}

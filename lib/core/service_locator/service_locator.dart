@@ -1,4 +1,5 @@
 import 'package:account_control/core/database/sqlite_connection_factory.dart';
+import 'package:account_control/feature/expense/presenter/cubits/expense_cubit.dart';
 import 'package:account_control/feature/home/domain/repositories/account_info_repository.dart';
 import 'package:account_control/feature/home/domain/usecases/get_account_info_usecase.dart';
 import 'package:account_control/feature/home/external/datasource/account_info_datasource_impl.dart';
@@ -34,6 +35,14 @@ void initServiceLocator() {
 
   getIt.registerFactory<HomeAppCubit>(
     () => HomeAppCubit(
+      usecase: getIt(),
+    ),
+  );
+
+  // ! expense
+
+  getIt.registerFactory<ExpenseCubit>(
+    () => ExpenseCubit(
       usecase: getIt(),
     ),
   );
