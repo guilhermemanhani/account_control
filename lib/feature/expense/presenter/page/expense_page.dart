@@ -42,9 +42,9 @@ class _ExpensePageState extends State<ExpensePage> {
   String _selectedAccount = '';
   String _selectedReason = '';
   String _selectedLocal = '';
-  List<AccountEntity> listAccount = [];
-  List<LocalEntity> listLocal = [];
-  List<ReasonEntity> listReasons = [];
+  // List<AccountEntity> listAccount = [];
+  // List<LocalEntity> listLocal = [];
+  // List<ReasonEntity> listReasons = [];
   List<BankEntity> listBank = [];
 
   // final reactionDisposer = <ReactionDisposer>[];
