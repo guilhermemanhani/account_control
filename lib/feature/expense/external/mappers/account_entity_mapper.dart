@@ -5,8 +5,8 @@ class AccountEntityMapper {
     return AccountEntity(
       id: json['id'],
       conta: json['conta'],
-      saldo: json['balance'],
-      idbanco: json['currency'],
+      saldo: json['saldo'],
+      idbanco: json['idbanco'],
       instituicao: json['instituicao'],
     );
   }
