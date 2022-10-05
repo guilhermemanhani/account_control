@@ -31,9 +31,9 @@ class _ExpensePageState extends State<ExpensePage> {
   bool _isNegative = false;
   DateTime _selectedDate = DateTime.now();
   String _selectedBank = '';
-  final String _selectedAccount = '';
-  final String _selectedReason = '';
-  String _selectedLocal = '';
+  String? _selectedAccount;
+  String? _selectedReason;
+  String? _selectedLocal;
   List<BankEntity> listBank = [];
 
   @override
@@ -103,72 +103,6 @@ class _ExpensePageState extends State<ExpensePage> {
                 const SizedBox(
                   height: 16,
                 ),
-                DentrodobolsoTextFormField(
-                  label: 'Descrição',
-                  controller: _descriptionEC,
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                // BlocBuilder<ExpenseCubit, ExpenseState>(
-                //   builder: (context, state) {
-                //     if (state is ExpenseLoadingState) {
-                //       return const Center(
-                //         key: Key('circular-progress-indicator'),
-                //         child: CircularProgressIndicator(),
-                //       );
-                //     } else if (state is ExpenseAccountLoadedState) {
-                //       return Row(
-                //         children: [
-                //           DentrodobolsoDropDownButton(
-                //             widget: DropdownButton<String>(
-                //               isExpanded: true,
-                //               underline: Container(
-                //                 width: double.infinity,
-                //               ),
-                //               icon: const Icon(
-                //                 Icons.keyboard_arrow_down_sharp,
-                //               ),
-                //               hint: const Text('Conta'),
-                //               value: _selectedAccount,
-                //               onChanged: (value) => setState(() {
-                //                 _selectedAccount = value!;
-                //               }),
-                //               items: state.expenseAccount.map(
-                //                 (AccountEntity map) {
-                //                   return DropdownMenuItem<String>(
-                //                     value: map.id.toString(),
-                //                     // onTap: () =>
-                //                     //     state.expenseAccount.setIdAcccount(map.id),
-                //                     child: Text(
-                //                       '${map.instituicao} ${map.conta}',
-                //                     ),
-                //                   );
-                //                 },
-                //               ).toList(),
-                //             ),
-                //           ),
-                //           const SizedBox(
-                //             width: 16,
-                //           ),
-                //           IconButton(
-                //             onPressed: () => _showDialogAccount(),
-                //             icon: const Icon(Icons.add),
-                //           ),
-                //         ],
-                //       );
-                //     } else if (state is ExpenseErrorState) {
-                //       return Center(
-                //         key: const Key('expense-error-message'),
-                //         child: Text(state.errorMessage),
-                //       );
-                //     }
-                //     return const SizedBox();
-                //   },
-                // ),
-                const SizedBox(
-                  height: 16,
-                ),
                 BlocBuilder<ExpenseCubit, ExpenseState>(
                   builder: (context, state) {
                     if (state is ExpenseLoadingState) {
@@ -193,13 +127,16 @@ class _ExpensePageState extends State<ExpensePage> {
                               onChanged: (value) => setState(() {
                                 _selectedLocal = value!;
                               }),
-                              items: ['yellow', 'brown', 'silver']
-                                  .map((String value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
+                              items: state.expenseLocal.map(
+                                (LocalEntity map) {
+                                  return DropdownMenuItem<String>(
+                                    value: map.id.toString(),
+                                    child: Text(
+                                      map.local,
+                                    ),
+                                  );
+                                },
+                              ).toList(),
                             ),
                           ),
                           const SizedBox(
@@ -230,67 +167,141 @@ class _ExpensePageState extends State<ExpensePage> {
                 const SizedBox(
                   height: 16,
                 ),
-                // BlocBuilder<ExpenseCubit, ExpenseState>(
-                //   builder: (context, state) {
-                //     if (state is ExpenseLoadingState) {
-                //       return const Center(
-                //         key: Key('circular-progress-indicator'),
-                //         child: CircularProgressIndicator(),
-                //       );
-                //     } else if (state is ExpenseReasonLoadedState) {
-                //       return Row(
-                //         children: [
-                //           DentrodobolsoDropDownButton(
-                //             widget: DropdownButton<String>(
-                //               isExpanded: true,
-                //               underline: Container(
-                //                 width: double.infinity,
-                //               ),
-                //               icon: const Icon(
-                //                 Icons.keyboard_arrow_down_sharp,
-                //               ),
-                //               hint: const Text('Motivo'),
-                //               value: _selectedReason,
-                //               onChanged: (value) => setState(() {
-                //                 _selectedReason = value!;
-                //               }),
-                //               items: state.expenseReason.map(
-                //                 (ReasonEntity map) {
-                //                   return DropdownMenuItem<String>(
-                //                     value: map.id.toString(),
-                //                     child: Text(
-                //                       map.motivo,
-                //                     ),
-                //                   );
-                //                 },
-                //               ).toList(),
-                //             ),
-                //           ),
-                //           const SizedBox(
-                //             width: 16,
-                //           ),
-                //           DialogReasonsAdd(
-                //             message: 'Motivos já cadastrados:',
-                //             messageHighlighted: state.expenseReason
-                //                 .map((reason) => reason.motivo)
-                //                 .join(', '),
-                //             nameForm: 'Motivo',
-                //             title: 'Adicione um novo motivo',
-                //             saveController: (val) {
-                //               // controller.saveReason(val);
-                //             },
-                //           ),
-                //         ],
-                //       );
-                //     } else if (state is ExpenseErrorState) {
-                //       return Center(
-                //         key: const Key('expense-error-message'),
-                //         child: Text(state.errorMessage),
-                //       );
-                //     }
-                //     return const SizedBox();
-                //   },
-                // ),
+                DentrodobolsoTextFormField(
+                  label: 'Descrição',
+                  controller: _descriptionEC,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                BlocBuilder<ExpenseCubit, ExpenseState>(
+                  builder: (context, state) {
+                    if (state is ExpenseLoadingState) {
+                      return const Center(
+                        key: Key('circular-progress-indicator'),
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is ExpenseAccountLoadedState) {
+                      return Row(
+                        children: [
+                          DentrodobolsoDropDownButton(
+                            widget: DropdownButton<String>(
+                              isExpanded: true,
+                              underline: Container(
+                                width: double.infinity,
+                              ),
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down_sharp,
+                              ),
+                              hint: const Text('Conta'),
+                              value: _selectedAccount,
+                              onChanged: (value) => setState(() {
+                                _selectedAccount = value!;
+                              }),
+                              items: state.expenseAccount.map(
+                                (AccountEntity map) {
+                                  return DropdownMenuItem<String>(
+                                    value: map.id.toString(),
+                                    // onTap: () =>
+                                    //     state.expenseAccount.setIdAcccount(map.id),
+                                    child: Text(
+                                      '${map.instituicao} ${map.conta}',
+                                    ),
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          IconButton(
+                            onPressed: () => _showDialogAccount(),
+                            icon: const Icon(Icons.add),
+                          ),
+                        ],
+                      );
+                    } else if (state is ExpenseErrorState) {
+                      return Center(
+                        key: const Key('expense-error-message'),
+                        child: Text(state.errorMessage),
+                      );
+                    }
+                    return Row(
+                      children: [
+                        const Text('Você precisa cadastrar uma conta'),
+                        IconButton(
+                          onPressed: () => _showDialogAccount(),
+                          icon: const Icon(Icons.add),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                BlocBuilder<ExpenseCubit, ExpenseState>(
+                  builder: (context, state) {
+                    if (state is ExpenseLoadingState) {
+                      return const Center(
+                        key: Key('circular-progress-indicator'),
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is ExpenseReasonLoadedState) {
+                      return Row(
+                        children: [
+                          DentrodobolsoDropDownButton(
+                            widget: DropdownButton<String>(
+                              isExpanded: true,
+                              underline: Container(
+                                width: double.infinity,
+                              ),
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down_sharp,
+                              ),
+                              hint: const Text('Motivo'),
+                              value: _selectedReason,
+                              onChanged: (value) => setState(() {
+                                _selectedReason = value!;
+                              }),
+                              items: state.expenseReason.map(
+                                (ReasonEntity map) {
+                                  return DropdownMenuItem<String>(
+                                    value: map.id.toString(),
+                                    child: Text(
+                                      map.motivo,
+                                    ),
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          DialogReasonsAdd(
+                            message: 'Motivos já cadastrados:',
+                            messageHighlighted: state.expenseReason
+                                .map((reason) => reason.motivo)
+                                .join(', '),
+                            nameForm: 'Motivo',
+                            title: 'Adicione um novo motivo',
+                            saveController: (val) {
+                              // controller.saveReason(val);
+                            },
+                          ),
+                        ],
+                      );
+                    } else if (state is ExpenseErrorState) {
+                      return Center(
+                        key: const Key('expense-error-message'),
+                        child: Text(state.errorMessage),
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
               ],
             ),
           ),

@@ -57,15 +57,15 @@ class ExpenseCubit extends Cubit<ExpenseState> {
     }
   }
 
-  // Future<void> loadReasons() async {
-  //   emit(const ExpenseLoadingState());
-  //   try {
-  //     final result = await _reasonUsecase.call();
-  //     debugPrint(result.toString());
-  //     // await getMoviesUsecase.call();
-  //     emit(ExpenseReasonLoadedState(expenseReason: result));
-  //   } catch (error) {
-  //     emit(ExpenseErrorState(errorMessage: error.toString()));
-  //   }
-  // }
+  Future<void> loadReasons() async {
+    emit(const ExpenseLoadingState());
+    try {
+      final result = await _reasonUsecase.call();
+      debugPrint(result.toString());
+      // await getMoviesUsecase.call();
+      emit(ExpenseReasonLoadedState(expenseReason: result));
+    } catch (error) {
+      emit(ExpenseErrorState(errorMessage: error.toString()));
+    }
+  }
 }

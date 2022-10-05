@@ -159,10 +159,10 @@ class _HomePageState extends State<HomePage> {
             MaterialPageRoute(
               builder: (_) => BlocProvider(
                 create: (context) => getIt<ExpenseCubit>()
-                  // ..loadAccounts()
-                  // ..loadBanks()
-                  ..loadLocals(),
-                // ..loadReasons(),
+                  ..loadAccounts()
+                  ..loadBanks()
+                  ..loadLocals()
+                  ..loadReasons(),
                 child: const ExpensePage(),
               ),
             ),
