@@ -3,19 +3,18 @@ import '../../domain/entities/entities.dart';
 import '../../external/mappers/mappers.dart';
 import '../../infra/datasource/datasource.dart';
 
-class AccountDatasourceImpl implements AccountDatasource {
+class ReasonDatasourceImpl implements ReasonDatasource {
   final SqliteConnectionFactory _sqliteConnectionFactory;
-  AccountDatasourceImpl(
+  ReasonDatasourceImpl(
       {required SqliteConnectionFactory sqliteConnectionFactory})
       : _sqliteConnectionFactory = sqliteConnectionFactory;
 
   @override
-  Future<List<AccountEntity>> getAccount() async {
+  Future<List<ReasonEntity>> getReason() async {
     final conn = await _sqliteConnectionFactory.openConnection();
     final result = await conn.rawQuery('''
-      select C.*, B.instituicao from conta C
-      inner join BANCO B on B.id = C.idbanco
+      select * from motivo
     ''');
-    return result.map((e) => AccountEntityMapper.fromJson(e)).toList();
+    return result.map((e) => ReasonEntityMapper.fromJson(e)).toList();
   }
 }

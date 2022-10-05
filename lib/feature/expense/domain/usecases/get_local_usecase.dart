@@ -1,5 +1,5 @@
-import 'package:account_control/feature/expense/domain/entities/local_entity.dart';
-import 'package:account_control/feature/expense/domain/repositories/local_repository.dart';
+import '../entities/entities.dart';
+import '../repositories/repositories.dart';
 
 abstract class GetLocalUsecase {
   Future<List<LocalEntity>> call();

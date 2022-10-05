@@ -1,5 +1,5 @@
-import 'package:account_control/feature/expense/domain/entities/account_entity.dart';
-import 'package:account_control/feature/expense/domain/repositories/account_repository.dart';
+import '../entities/entities.dart';
+import '../repositories/repositories.dart';
 
 abstract class GetAccountUsecase {
   Future<List<AccountEntity>> call();

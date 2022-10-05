@@ -1,10 +1,3 @@
-import 'package:account_control/core/database/sqlite_connection_factory.dart';
-import 'package:account_control/feature/expense/domain/repositories/account_repository.dart';
-import 'package:account_control/feature/expense/domain/usecases/get_account_usecase.dart';
-import 'package:account_control/feature/expense/external/datasource/account_datasource_impl.dart';
-import 'package:account_control/feature/expense/infra/datasource/account_datasource.dart';
-import 'package:account_control/feature/expense/infra/repositories/account_info_repository_impl.dart';
-import 'package:account_control/feature/expense/presenter/cubits/expense_cubit.dart';
 import 'package:account_control/feature/home/domain/repositories/account_info_repository.dart';
 import 'package:account_control/feature/home/domain/usecases/get_account_info_usecase.dart';
 import 'package:account_control/feature/home/external/datasource/account_info_datasource_impl.dart';
@@ -12,6 +5,14 @@ import 'package:account_control/feature/home/infra/datasource/account_info_datas
 import 'package:account_control/feature/home/infra/repositories/account_info_repository_impl.dart';
 import 'package:account_control/feature/home/presenter/cubits/home_app_cubit.dart';
 import 'package:get_it/get_it.dart';
+
+import '../../core/database/database.dart';
+import '../../feature/expense/domain/repositories/repositories.dart';
+import '../../feature/expense/domain/usecases/usecases.dart';
+import '../../feature/expense/external/datasource/datasource.dart';
+import '../../feature/expense/infra/datasource/datasource.dart';
+import '../../feature/expense/infra/repositories/repositories.dart';
+import '../../feature/expense/presenter/cubits/cubits.dart';
 
 final getIt = GetIt.instance;
 
@@ -64,9 +65,66 @@ void initServiceLocator() {
     ),
   );
 
+  getIt.registerSingleton<BankDatasource>(
+    BankDatasourceImpl(
+      sqliteConnectionFactory: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<BankRepository>(
+    BankRepositoryImpl(
+      bankDatasource: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<GetBankUsecase>(
+    GetBankUsecaseImpl(
+      bankRepository: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<LocalDatasource>(
+    LocalDatasourceImpl(
+      sqliteConnectionFactory: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<LocalRepository>(
+    LocalRepositoryImpl(
+      localDatasource: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<GetLocalUsecase>(
+    GetLocalUsecaseImpl(
+      localRepository: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<ReasonDatasource>(
+    ReasonDatasourceImpl(
+      sqliteConnectionFactory: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<ReasonRepository>(
+    ReasonRepositoryImpl(
+      reasonDatasource: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<GetReasonUsecase>(
+    GetReasonUsecaseImpl(
+      reasonRepository: getIt(),
+    ),
+  );
+
   getIt.registerFactory<ExpenseCubit>(
     () => ExpenseCubit(
-      usecase: getIt(),
+      accountUsecase: getIt(),
+      bankUsecase: getIt(),
+      localUsecase: getIt(),
+      reasonUsecase: getIt(),
     ),
   );
 }

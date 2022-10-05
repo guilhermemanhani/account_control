@@ -1,4 +1,4 @@
-import 'package:account_control/core/database/migration/migration.dart';
+import 'package:account_control/core/database/migrations/migration.dart';
 import 'package:sqflite_common/sqlite_api.dart';
 
 class MigrationV1 implements Migration {

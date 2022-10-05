@@ -1,8 +1,8 @@
-import 'package:account_control/core/database/migration/migration_v1.dart';
-import 'package:account_control/core/database/migration/migration_v2.dart';
-import 'package:account_control/core/database/migration/migration_v3.dart';
+import 'package:account_control/core/database/migrations/migration_v1.dart';
+import 'package:account_control/core/database/migrations/migration_v2.dart';
+import 'package:account_control/core/database/migrations/migration_v3.dart';
 
-import 'migration/migration.dart';
+import 'migrations/migration.dart';
 
 class SqlitemigrationFactory {
   List<Migration> getCreateMigration() => [

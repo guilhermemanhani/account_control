@@ -1,4 +1,4 @@
-import 'package:account_control/feature/expense/domain/entities/account_entity.dart';
+import '../../domain/entities/entities.dart';
 
 abstract class AccountRepository {
   Future<List<AccountEntity>> getAccount();

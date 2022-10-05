@@ -1,6 +1,6 @@
-import 'package:account_control/feature/expense/domain/entities/account_entity.dart';
-import 'package:account_control/feature/expense/domain/repositories/account_repository.dart';
-import 'package:account_control/feature/expense/infra/datasource/account_datasource.dart';
+import '../../domain/entities/entities.dart';
+import '../../domain/repositories/repositories.dart';
+import '../datasource/datasource.dart';
 
 class AccountRepositoryImpl implements AccountRepository {
   final AccountDatasource _accountDatasource;

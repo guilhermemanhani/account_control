@@ -1,5 +1,5 @@
 import '../../domain/entities/entities.dart';
 
-abstract class LocalRepository {
+abstract class LocalDatasource {
   Future<List<LocalEntity>> getLocal();
 }

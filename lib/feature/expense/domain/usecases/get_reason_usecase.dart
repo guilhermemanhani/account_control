@@ -1,5 +1,5 @@
-import 'package:account_control/feature/expense/domain/entities/reason_entity.dart';
-import 'package:account_control/feature/expense/domain/repositories/reason_repository.dart';
+import '../entities/entities.dart';
+import '../repositories/repositories.dart';
 
 abstract class GetReasonUsecase {
   Future<List<ReasonEntity>> call();

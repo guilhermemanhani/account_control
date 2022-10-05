@@ -1,5 +1,5 @@
 import '../../domain/entities/entities.dart';
 
-abstract class ReasonRepository {
+abstract class ReasonDatasource {
   Future<List<ReasonEntity>> getReason();
 }
