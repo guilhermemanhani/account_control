@@ -103,6 +103,13 @@ class _ExpensePageState extends State<ExpensePage> {
                 const SizedBox(
                   height: 16,
                 ),
+                DentrodobolsoTextFormField(
+                  label: 'Descrição',
+                  controller: _descriptionEC,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
                 BlocBuilder<ExpenseCubit, ExpenseState>(
                   builder: (context, state) {
                     if (state is ExpenseLoadingState) {
@@ -163,13 +170,6 @@ class _ExpensePageState extends State<ExpensePage> {
                     }
                     return const SizedBox();
                   },
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                DentrodobolsoTextFormField(
-                  label: 'Descrição',
-                  controller: _descriptionEC,
                 ),
                 const SizedBox(
                   height: 16,

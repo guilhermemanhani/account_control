@@ -29,10 +29,11 @@ class ExpenseScreenLoadedState extends ExpenseState {
       required this.expenseLocal});
 
   @override
-  bool operator ==(covariant ExpenseScreenLoadedState other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return listEquals(other.expenseAccount, expenseAccount) &&
+    return other is ExpenseScreenLoadedState &&
+        listEquals(other.expenseAccount, expenseAccount) &&
         listEquals(other.expenseBank, expenseBank) &&
         listEquals(other.expenseReason, expenseReason) &&
         listEquals(other.expenseLocal, expenseLocal);
