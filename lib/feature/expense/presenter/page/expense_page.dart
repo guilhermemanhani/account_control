@@ -110,7 +110,7 @@ class _ExpensePageState extends State<ExpensePage> {
                         key: Key('circular-progress-indicator'),
                         child: CircularProgressIndicator(),
                       );
-                    } else if (state is ExpenseLocalLoadedState) {
+                    } else if (state is ExpenseScreenLoadedState) {
                       return Row(
                         children: [
                           DentrodobolsoDropDownButton(
@@ -181,7 +181,7 @@ class _ExpensePageState extends State<ExpensePage> {
                         key: Key('circular-progress-indicator'),
                         child: CircularProgressIndicator(),
                       );
-                    } else if (state is ExpenseAccountLoadedState) {
+                    } else if (state is ExpenseScreenLoadedState) {
                       return Row(
                         children: [
                           DentrodobolsoDropDownButton(
@@ -248,7 +248,7 @@ class _ExpensePageState extends State<ExpensePage> {
                         key: Key('circular-progress-indicator'),
                         child: CircularProgressIndicator(),
                       );
-                    } else if (state is ExpenseReasonLoadedState) {
+                    } else if (state is ExpenseScreenLoadedState) {
                       return Row(
                         children: [
                           DentrodobolsoDropDownButton(

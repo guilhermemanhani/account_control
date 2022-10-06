@@ -21,6 +21,24 @@ class ExpenseCubit extends Cubit<ExpenseState> {
         _localUsecase = localUsecase,
         super(ExpenseInitialState());
 
+  Future<void> loadScreen() async {
+    emit(const ExpenseLoadingState());
+    try {
+      final account = await _accountUsecase.call();
+      final bank = await _bankUsecase.call();
+      final reason = await _reasonUsecase.call();
+      final local = await _localUsecase.call();
+      emit(ExpenseScreenLoadedState(
+        expenseReason: reason,
+        expenseLocal: local,
+        expenseAccount: account,
+        expenseBank: bank,
+      ));
+    } catch (error) {
+      emit(ExpenseErrorState(errorMessage: error.toString()));
+    }
+  }
+
   Future<void> loadAccounts() async {
     emit(const ExpenseLoadingState());
     try {
