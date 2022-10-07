@@ -1,12 +1,13 @@
+import 'package:account_control/core/service_locator/service_locator.dart';
 import 'package:account_control/core/ui/extensions/theme_extension.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/ui/widgets/widgets.dart';
+import '../../../account/presenter/presenter.dart';
 import '../../domain/entities/entities.dart';
 import '../cubits/cubits.dart';
 import '../widget/widget.dart';
@@ -27,14 +28,12 @@ class _ExpensePageState extends State<ExpensePage> {
   final _descriptionEC = TextEditingController();
   final _numAccountEC = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final _formKeyPopup = GlobalKey<FormState>();
+
   bool _isNegative = false;
   DateTime _selectedDate = DateTime.now();
-  String _selectedBank = '';
   String? _selectedAccount;
   String? _selectedReason;
   String? _selectedLocal;
-  List<BankEntity> listBank = [];
 
   @override
   void initState() {
@@ -216,7 +215,17 @@ class _ExpensePageState extends State<ExpensePage> {
                             width: 16,
                           ),
                           IconButton(
-                            onPressed: () => _showDialogAccount(),
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => BlocProvider(
+                                  create: (context) =>
+                                      getIt<SaveAccountCubit>(),
+                                  child: SaveAccountPage(
+                                    bankList: state.expenseBank,
+                                  ),
+                                ),
+                              ),
+                            ),
                             icon: const Icon(Icons.add),
                           ),
                         ],
@@ -227,15 +236,7 @@ class _ExpensePageState extends State<ExpensePage> {
                         child: Text(state.errorMessage),
                       );
                     }
-                    return Row(
-                      children: [
-                        const Text('Você precisa cadastrar uma conta'),
-                        IconButton(
-                          onPressed: () => _showDialogAccount(),
-                          icon: const Icon(Icons.add),
-                        ),
-                      ],
-                    );
+                    return const SizedBox();
                   },
                 ),
                 const SizedBox(
@@ -319,163 +320,6 @@ class _ExpensePageState extends State<ExpensePage> {
         },
         child: const Icon(Icons.payment),
       ),
-    );
-  }
-
-  _showDialogAccount() {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return DialogAccount(
-          message: 'Bancos já cadastrados:',
-          messageHighlighted:
-              listBank.map((bank) => bank.instituicao).join(', '),
-          title: 'Deseja adicionar uma conta ou um banco?',
-          onTapBanco: () => _dialogSimpleRegisterBank(),
-          onTapConta: () => _showDialogRegisterAccount(),
-        );
-      },
-    );
-  }
-
-  _showDialogRegisterAccount() {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          scrollable: true,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              16,
-            ),
-          ),
-          content: Form(
-            key: _formKeyPopup,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              constraints: const BoxConstraints(minHeight: 200),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  DentrodobolsoTextFormField(
-                    label: 'conta',
-                    textInputType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                    controller: _numAccountEC,
-                    textInputFormatter: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    // validator: Validatorless.required('Valor é obrigatório'),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  DentrodobolsoDropDownButton(
-                    widget: DropdownButton<String>(
-                      underline: Container(
-                        width: double.infinity,
-                      ),
-                      isExpanded: true,
-                      icon: const Icon(
-                        Icons.keyboard_arrow_down_sharp,
-                      ),
-                      hint: const Text('Banco'),
-                      value: _selectedBank,
-                      // isDense: true,
-                      onChanged: (value) => setState(() {
-                        _selectedBank = value!;
-                      }),
-                      items: listBank.map(
-                        (BankEntity map) {
-                          return DropdownMenuItem<String>(
-                            onTap: () => setState(() {
-                              _selectedBank = map.id.toString();
-                            }),
-                            value: map.id.toString(),
-                            child: Text(
-                              map.instituicao,
-                            ),
-                          );
-                        },
-                      ).toList(),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  DentrodobolsoTextFormField(
-                    label: 'Valor',
-                    controller: _controllerMoneyAccount,
-                    textInputType: TextInputType.number,
-                    textInputAction: TextInputAction.done,
-                    // validator: Validatorless.required('Valor é obrigatório'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          actions: [
-            TextIconButton(
-              icon: Icons.check_circle_outline,
-              title: 'Salvar',
-              color: context.green,
-              width: 110,
-              onTap: () {
-                final formValid =
-                    _formKeyPopup.currentState?.validate() ?? false;
-                if (formValid) {
-                  Navigator.pop(context);
-                  // controller.saveAccont(
-                  //     _numAccountEC.text, _controllerMoneyAccount.numberValue);
-                }
-
-                // widget.onTapSave();
-              },
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            TextIconButton(
-              icon: Icons.cancel_outlined,
-              title: 'Cancelar',
-              color: context.red,
-              width: 110,
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-          actionsPadding: const EdgeInsets.only(bottom: 12),
-          actionsAlignment: MainAxisAlignment.center,
-          title: Text(
-            'Adicionar um nova conta:',
-            style: TextStyle(
-              color: context.darkBlue,
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  _dialogSimpleRegisterBank() {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return DialogSimpleRegister(
-          message: 'Bancos já cadastrados:',
-          messageHighlighted:
-              listBank.map((bank) => bank.instituicao).join(', '),
-          ontap: (val) {
-            debugPrint('salvarbanco');
-          },
-          nameForm: 'Instituição',
-          title: 'Adicione um novo banco',
-        );
-      },
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:account_control/feature/home/presenter/cubits/home_app_cubit.dar
 import 'package:get_it/get_it.dart';
 
 import '../../core/database/database.dart';
+import '../../feature/account/account.dart';
 import '../../feature/expense/domain/repositories/repositories.dart';
 import '../../feature/expense/domain/usecases/usecases.dart';
 import '../../feature/expense/external/datasource/datasource.dart';
@@ -125,6 +126,32 @@ void initServiceLocator() {
       bankUsecase: getIt(),
       localUsecase: getIt(),
       reasonUsecase: getIt(),
+    ),
+  );
+
+  // ! save account
+
+  getIt.registerSingleton<SaveAccountDatasource>(
+    SaveAccountDatasourceImpl(
+      sqliteConnectionFactory: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<SaveAccountRepository>(
+    SaveAccountRepositoryImpl(
+      saveAccountDatasource: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<SaveAccountUsecase>(
+    SaveAccountUsecaseImpl(
+      saveAccountRepository: getIt(),
+    ),
+  );
+
+  getIt.registerFactory<SaveAccountCubit>(
+    () => SaveAccountCubit(
+      usecase: getIt(),
     ),
   );
 }
