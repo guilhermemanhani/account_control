@@ -422,7 +422,7 @@ class _ExpensePageState extends State<ExpensePage> {
               icon: Icons.check_circle_outline,
               title: 'Salvar',
               color: context.green,
-              width: 100,
+              width: 110,
               onTap: () {
                 final formValid =
                     _formKeyPopup.currentState?.validate() ?? false;
@@ -435,11 +435,14 @@ class _ExpensePageState extends State<ExpensePage> {
                 // widget.onTapSave();
               },
             ),
+            const SizedBox(
+              width: 16,
+            ),
             TextIconButton(
               icon: Icons.cancel_outlined,
               title: 'Cancelar',
               color: context.red,
-              width: 100,
+              width: 110,
               onTap: () {
                 Navigator.pop(context);
               },

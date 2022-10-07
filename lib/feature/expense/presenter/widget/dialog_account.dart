@@ -51,23 +51,27 @@ class DialogAccount extends StatelessWidget {
           icon: Icons.account_balance_outlined,
           title: 'Banco',
           color: context.darkBlue,
-          width: 100,
+          width: 110,
           onTap: () {
             Navigator.pop(context);
             onTapBanco();
           },
         ),
+        const SizedBox(
+          width: 8,
+        ),
         TextIconButton(
           icon: Icons.payment,
           title: 'Conta',
           color: context.darkBlue,
-          width: 100,
+          width: 110,
           onTap: () {
             Navigator.pop(context);
             onTapConta();
           },
         ),
       ],
+      buttonPadding: const EdgeInsets.only(bottom: 46),
       actionsAlignment: MainAxisAlignment.center,
       title: Text(
         title,

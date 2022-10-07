@@ -78,7 +78,7 @@ class _DialogSimpleRegisterState extends State<DialogSimpleRegister> {
           icon: Icons.check_circle_outline,
           title: 'Salvar',
           color: context.green,
-          width: 100,
+          width: 110,
           onTap: () {
             final formValid = _formKey.currentState?.validate() ?? false;
             if (formValid) {
@@ -89,11 +89,14 @@ class _DialogSimpleRegisterState extends State<DialogSimpleRegister> {
             // widget.onTapSave();
           },
         ),
+        const SizedBox(
+          width: 8,
+        ),
         TextIconButton(
           icon: Icons.cancel_outlined,
           title: 'Cancelar',
           color: context.red,
-          width: 100,
+          width: 110,
           onTap: () {
             Navigator.pop(context);
           },
