@@ -27,6 +27,7 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
   final _controllerMoneyAccount =
       MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
   String? _bankSelected;
+  int? _bankSelectedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +92,7 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                         (BankEntity map) {
                           return DropdownMenuItem<String>(
                             onTap: () => setState(() {
-                              _bankSelected = map.id.toString();
+                              _bankSelectedIndex = map.id;
                             }),
                             value: map.id.toString(),
                             child: Text(
@@ -101,6 +102,9 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                         },
                       ).toList(),
                     ),
+                  ),
+                  const SizedBox(
+                    height: 16,
                   ),
                   BlocConsumer<SaveAccountCubit, SaveAccountState>(
                     listener: (context, state) {
@@ -124,14 +128,15 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                       final bool isLoadingState =
                           state is SaveAccountLoadingState;
                       return AppButton(
-                        key: const Key('button-login'),
-                        text: 'Login',
+                        key: const Key('save-account'),
+                        text: 'Salvar conta',
                         onPressed: () {
                           final request = SaveAccountEntity(
-                              // login: _loginController.text,
-                              // password: _passwordController.text,
-                              );
-
+                            conta: int.parse(_numAccountEC.text),
+                            id: 0,
+                            idbanco: _bankSelectedIndex!,
+                            saldo: _controllerMoneyAccount.numberValue,
+                          );
                           context.read<SaveAccountCubit>().saveAccount(request);
                         },
                         showProgress: isLoadingState,

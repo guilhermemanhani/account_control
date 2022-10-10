@@ -3,14 +3,12 @@ class SaveAccountEntity {
   final int conta;
   final double saldo;
   final int idbanco;
-  final String? instituicao;
 
   SaveAccountEntity({
     required this.id,
     required this.conta,
     required this.saldo,
     required this.idbanco,
-    this.instituicao,
   });
 
   @override
@@ -20,16 +18,11 @@ class SaveAccountEntity {
     return other.id == id &&
         other.conta == conta &&
         other.saldo == saldo &&
-        other.idbanco == idbanco &&
-        other.instituicao == instituicao;
+        other.idbanco == idbanco;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        conta.hashCode ^
-        saldo.hashCode ^
-        idbanco.hashCode ^
-        instituicao.hashCode;
+    return id.hashCode ^ conta.hashCode ^ saldo.hashCode ^ idbanco.hashCode;
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../ui/extensions/theme_extension.dart';
+
 class AppButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
@@ -14,8 +16,6 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const backgroundColor1 = Colors.orange;
-    const backgroundColor2 = Colors.red;
     const textColor = Colors.white;
 
     return GestureDetector(
@@ -25,10 +25,10 @@ class AppButton extends StatelessWidget {
         width: 200,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(22),
-          gradient: const LinearGradient(
-            colors: [backgroundColor1, backgroundColor2],
-            begin: FractionalOffset.topCenter,
-            end: FractionalOffset.bottomCenter,
+          gradient: LinearGradient(
+            colors: [context.darkBlue, context.lightGrey],
+            begin: FractionalOffset.bottomRight,
+            end: FractionalOffset.topLeft,
           ),
         ),
         child: showProgress
