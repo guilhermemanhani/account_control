@@ -47,7 +47,7 @@ void initServiceLocator() {
   );
 
   // ! expense
-
+  // ? account get
   getIt.registerSingleton<AccountDatasource>(
     AccountDatasourceImpl(
       sqliteConnectionFactory: getIt(),
@@ -65,6 +65,8 @@ void initServiceLocator() {
       accountRepository: getIt(),
     ),
   );
+
+  // ? bank get
 
   getIt.registerSingleton<BankDatasource>(
     BankDatasourceImpl(
@@ -84,6 +86,8 @@ void initServiceLocator() {
     ),
   );
 
+  // ? local get
+
   getIt.registerSingleton<LocalDatasource>(
     LocalDatasourceImpl(
       sqliteConnectionFactory: getIt(),
@@ -101,6 +105,8 @@ void initServiceLocator() {
       localRepository: getIt(),
     ),
   );
+
+  // ? reason get
 
   getIt.registerSingleton<ReasonDatasource>(
     ReasonDatasourceImpl(
@@ -120,12 +126,75 @@ void initServiceLocator() {
     ),
   );
 
+  // ? bank save
+
+  getIt.registerSingleton<SaveBankDatasource>(
+    SaveBankDatasourceImpl(
+      sqliteConnectionFactory: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<SaveBankRepository>(
+    SaveBankRepositoryImpl(
+      saveBankDatasource: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<SaveBankUsecase>(
+    SaveBankUsecaseImpl(
+      bankRepository: getIt(),
+    ),
+  );
+
+  // ? reason save
+
+  getIt.registerSingleton<SaveReasonDatasource>(
+    SaveReasonDatasourceImpl(
+      sqliteConnectionFactory: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<SaveReasonRepository>(
+    SaveReasonRepositoryImpl(
+      saveReasonDatasource: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<SaveReasonUsecase>(
+    SaveReasonUsecaseImpl(
+      reasonRepository: getIt(),
+    ),
+  );
+
+  // ? local save
+
+  getIt.registerSingleton<SaveLocalDatasource>(
+    SaveLocalDatasourceImpl(
+      sqliteConnectionFactory: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<SaveLocalRepository>(
+    SaveLocalRepositoryImpl(
+      saveLocalDatasource: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<SaveLocalUsecase>(
+    SaveLocalUsecaseImpl(
+      localRepository: getIt(),
+    ),
+  );
+
   getIt.registerFactory<ExpenseCubit>(
     () => ExpenseCubit(
       accountUsecase: getIt(),
       bankUsecase: getIt(),
       localUsecase: getIt(),
       reasonUsecase: getIt(),
+      saveBankUsecase: getIt(),
+      saveLocalUsecase: getIt(),
+      saveReasonUsecase: getIt(),
     ),
   );
 

@@ -1,8 +1,5 @@
-import 'package:account_control/feature/account/domain/failures/save_account_failure.dart';
-
-import '../../domain/entities/entities.dart';
-import '../../domain/repositories/repositories.dart';
-import '../../infra/datasource/datasource.dart';
+import '../../domain/domain.dart';
+import '../datasource/datasource.dart';
 
 class SaveAccountRepositoryImpl implements SaveAccountRepository {
   final SaveAccountDatasource _saveAccountDatasource;
@@ -14,8 +11,14 @@ class SaveAccountRepositoryImpl implements SaveAccountRepository {
   @override
   Future<bool> saveAccount({required SaveAccountEntity saveAccountEntity}) {
     try {
+      SaveAccountEntity accountEntity = SaveAccountEntity(
+        conta: saveAccountEntity.conta,
+        id: saveAccountEntity.id,
+        idbanco: saveAccountEntity.idbanco,
+        saldo: saveAccountEntity.saldo * 100,
+      );
       return _saveAccountDatasource.saveAccount(
-        saveAccountEntity: saveAccountEntity,
+        saveAccountEntity: accountEntity,
       );
     } on SaveAccountFailure {
       rethrow;

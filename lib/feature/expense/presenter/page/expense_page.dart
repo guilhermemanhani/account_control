@@ -214,6 +214,7 @@ class _ExpensePageState extends State<ExpensePage> {
                           const SizedBox(
                             width: 16,
                           ),
+                          // todo: add bank
                           IconButton(
                             onPressed: () => Navigator.of(context).push(
                               MaterialPageRoute(

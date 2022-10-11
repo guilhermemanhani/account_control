@@ -116,6 +116,54 @@ class ExpenseReasonLoadedState extends ExpenseState {
   int get hashCode => expenseReason.hashCode;
 }
 
+class SaveReasonSuccessState extends ExpenseState {
+  final bool success;
+
+  SaveReasonSuccessState({required this.success});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is SaveReasonSuccessState && other.success == success;
+  }
+
+  @override
+  int get hashCode => success.hashCode;
+}
+
+class SaveBankSuccessState extends ExpenseState {
+  final bool success;
+
+  SaveBankSuccessState({required this.success});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is SaveBankSuccessState && other.success == success;
+  }
+
+  @override
+  int get hashCode => success.hashCode;
+}
+
+class SaveLocalSuccessState extends ExpenseState {
+  final bool success;
+
+  SaveLocalSuccessState({required this.success});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is SaveLocalSuccessState && other.success == success;
+  }
+
+  @override
+  int get hashCode => success.hashCode;
+}
+
 class ExpenseEmptyState extends ExpenseState {}
 
 class ExpenseErrorState extends ExpenseState {
