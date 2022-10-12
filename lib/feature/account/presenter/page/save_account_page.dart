@@ -142,7 +142,7 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                         showProgress: isLoadingState,
                       );
                     },
-                  )
+                  ),
                 ],
               ),
             ),

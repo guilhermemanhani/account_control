@@ -10,7 +10,6 @@ import '../../../../core/ui/widgets/widgets.dart';
 import '../../../account/presenter/presenter.dart';
 import '../../domain/entities/entities.dart';
 import '../cubits/cubits.dart';
-import '../widget/widget.dart';
 
 class ExpensePage extends StatefulWidget {
   const ExpensePage({Key? key}) : super(key: key);
@@ -27,6 +26,8 @@ class _ExpensePageState extends State<ExpensePage> {
   final dateFormat = DateFormat('dd/MM/y');
   final _descriptionEC = TextEditingController();
   final _numAccountEC = TextEditingController();
+  final _localEC = TextEditingController();
+  final _reasonEC = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   bool _isNegative = false;
@@ -34,6 +35,8 @@ class _ExpensePageState extends State<ExpensePage> {
   String? _selectedAccount;
   String? _selectedReason;
   String? _selectedLocal;
+  bool _showLocalEC = false;
+  bool _showReasonEC = false;
 
   @override
   void initState() {
@@ -148,16 +151,13 @@ class _ExpensePageState extends State<ExpensePage> {
                           const SizedBox(
                             width: 16,
                           ),
-                          DialogReasonsAdd(
-                            message: 'Local já cadastrados:',
-                            messageHighlighted: state.expenseLocal
-                                .map((local) => local.local)
-                                .join(', '),
-                            nameForm: 'Local',
-                            title: 'Adicione um novo local',
-                            saveController: (val) {
-                              // controller.saveLocal(val);
-                            },
+                          IconButton(
+                            onPressed: () => setState(() {
+                              _showLocalEC = !_showLocalEC;
+                            }),
+                            icon: _showLocalEC
+                                ? const Icon(Icons.remove)
+                                : const Icon(Icons.add),
                           ),
                         ],
                       );
@@ -170,6 +170,15 @@ class _ExpensePageState extends State<ExpensePage> {
                     return const SizedBox();
                   },
                 ),
+                SizedBox(
+                  height: _showLocalEC ? 16 : 0,
+                ),
+                _showLocalEC
+                    ? DentrodobolsoTextFormField(
+                        label: 'Local',
+                        controller: _localEC,
+                      )
+                    : const SizedBox(),
                 const SizedBox(
                   height: 16,
                 ),
@@ -282,16 +291,13 @@ class _ExpensePageState extends State<ExpensePage> {
                           const SizedBox(
                             width: 16,
                           ),
-                          DialogReasonsAdd(
-                            message: 'Motivos já cadastrados:',
-                            messageHighlighted: state.expenseReason
-                                .map((reason) => reason.motivo)
-                                .join(', '),
-                            nameForm: 'Motivo',
-                            title: 'Adicione um novo motivo',
-                            saveController: (val) {
-                              // controller.saveReason(val);
-                            },
+                          IconButton(
+                            onPressed: () => setState(() {
+                              _showReasonEC = !_showReasonEC;
+                            }),
+                            icon: _showReasonEC
+                                ? const Icon(Icons.remove)
+                                : const Icon(Icons.add),
                           ),
                         ],
                       );
@@ -304,6 +310,10 @@ class _ExpensePageState extends State<ExpensePage> {
                     return const SizedBox();
                   },
                 ),
+                SizedBox(
+                  height: _showReasonEC ? 16 : 0,
+                ),
+                _showReasonEC ? _saveReason() : const SizedBox(),
               ],
             ),
           ),
@@ -321,6 +331,54 @@ class _ExpensePageState extends State<ExpensePage> {
         },
         child: const Icon(Icons.payment),
       ),
+    );
+  }
+
+  _saveReason() {
+    return Column(
+      children: [
+        DentrodobolsoTextFormField(
+          label: 'Motivo',
+          controller: _reasonEC,
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        BlocConsumer<ExpenseCubit, ExpenseState>(
+          listener: (context, state) {
+            // if (state is SaveAccountSuccessState) {
+            //   showDialog(
+            //     context: context,
+            //     builder: (_) => const _SuccessDialogWidget(),
+            //   );
+            // }
+            if (state is ExpenseErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    state.errorMessage,
+                  ),
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            final bool isLoadingState = state is ExpenseLoadingState;
+            return AppButton(
+              key: const Key('save-account'),
+              text: 'Salvar conta',
+              onPressed: () {
+                final request = ReasonEntity(
+                  id: 0,
+                  motivo: _reasonEC.text,
+                );
+                context.read<ExpenseCubit>().saveReason(request);
+              },
+              showProgress: isLoadingState,
+            );
+          },
+        ),
+      ],
     );
   }
 }
