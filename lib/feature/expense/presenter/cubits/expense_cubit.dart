@@ -99,6 +99,7 @@ class ExpenseCubit extends Cubit<ExpenseState> {
       final result = await _saveBankUsecase.call(bank: bank);
       debugPrint(result.toString());
       emit(SaveBankSuccessState(success: true));
+      loadScreen();
     } catch (error) {
       emit(ExpenseErrorState(errorMessage: error.toString()));
     }
@@ -110,6 +111,7 @@ class ExpenseCubit extends Cubit<ExpenseState> {
       final result = await _saveReasonUsecase.call(reason: reason);
       debugPrint(result.toString());
       emit(SaveReasonSuccessState(success: true));
+      loadScreen();
     } catch (error) {
       emit(ExpenseErrorState(errorMessage: error.toString()));
     }
@@ -121,6 +123,7 @@ class ExpenseCubit extends Cubit<ExpenseState> {
       final result = await _saveLocalUsecase.call(local: local);
       debugPrint(result.toString());
       emit(SaveLocalSuccessState(success: true));
+      loadScreen();
     } catch (error) {
       emit(ExpenseErrorState(errorMessage: error.toString()));
     }

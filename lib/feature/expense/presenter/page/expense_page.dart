@@ -28,6 +28,7 @@ class _ExpensePageState extends State<ExpensePage> {
   final _numAccountEC = TextEditingController();
   final _localEC = TextEditingController();
   final _reasonEC = TextEditingController();
+  final _bankEC = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   bool _isNegative = false;
@@ -36,6 +37,7 @@ class _ExpensePageState extends State<ExpensePage> {
   String? _selectedReason;
   String? _selectedLocal;
   bool _showLocalEC = false;
+  final bool _showBankEC = false;
   bool _showReasonEC = false;
 
   @override
@@ -173,12 +175,7 @@ class _ExpensePageState extends State<ExpensePage> {
                 SizedBox(
                   height: _showLocalEC ? 16 : 0,
                 ),
-                _showLocalEC
-                    ? DentrodobolsoTextFormField(
-                        label: 'Local',
-                        controller: _localEC,
-                      )
-                    : const SizedBox(),
+                _showLocalEC ? _saveLocal() : const SizedBox(),
                 const SizedBox(
                   height: 16,
                 ),
@@ -346,12 +343,6 @@ class _ExpensePageState extends State<ExpensePage> {
         ),
         BlocConsumer<ExpenseCubit, ExpenseState>(
           listener: (context, state) {
-            // if (state is SaveAccountSuccessState) {
-            //   showDialog(
-            //     context: context,
-            //     builder: (_) => const _SuccessDialogWidget(),
-            //   );
-            // }
             if (state is ExpenseErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -366,13 +357,97 @@ class _ExpensePageState extends State<ExpensePage> {
             final bool isLoadingState = state is ExpenseLoadingState;
             return AppButton(
               key: const Key('save-account'),
-              text: 'Salvar conta',
+              text: 'Salvar motivo',
               onPressed: () {
                 final request = ReasonEntity(
                   id: 0,
                   motivo: _reasonEC.text,
                 );
                 context.read<ExpenseCubit>().saveReason(request);
+              },
+              showProgress: isLoadingState,
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  _saveLocal() {
+    return Column(
+      children: [
+        DentrodobolsoTextFormField(
+          label: 'Local',
+          controller: _localEC,
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        BlocConsumer<ExpenseCubit, ExpenseState>(
+          listener: (context, state) {
+            if (state is ExpenseErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    state.errorMessage,
+                  ),
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            final bool isLoadingState = state is ExpenseLoadingState;
+            return AppButton(
+              key: const Key('save-account'),
+              text: 'Salvar local',
+              onPressed: () {
+                final request = LocalEntity(
+                  id: 0,
+                  local: _localEC.text,
+                );
+                context.read<ExpenseCubit>().saveLocal(request);
+              },
+              showProgress: isLoadingState,
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  _saveBank() {
+    return Column(
+      children: [
+        DentrodobolsoTextFormField(
+          label: 'Banco',
+          controller: _bankEC,
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        BlocConsumer<ExpenseCubit, ExpenseState>(
+          listener: (context, state) {
+            if (state is ExpenseErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    state.errorMessage,
+                  ),
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            final bool isLoadingState = state is ExpenseLoadingState;
+            return AppButton(
+              key: const Key('save-account'),
+              text: 'Salvar banco',
+              onPressed: () {
+                final request = BankEntity(
+                  id: 0,
+                  instituicao: _bankEC.text,
+                );
+                context.read<ExpenseCubit>().saveBank(request);
               },
               showProgress: isLoadingState,
             );
