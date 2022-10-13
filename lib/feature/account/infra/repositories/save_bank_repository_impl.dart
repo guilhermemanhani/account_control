@@ -15,7 +15,7 @@ class SaveBankRepositoryImpl implements SaveBankRepository {
       // } on SaveLocalFailure {
       //   rethrow;
     } catch (error, stackTrace) {
-      throw UnknownExpenseFailure(
+      throw UnknownSaveAccountFailure(
           stackTrace: stackTrace, label: 'saveLocalRepositoryImpl-saveAccount');
     }
   }

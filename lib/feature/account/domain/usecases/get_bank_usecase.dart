@@ -1,5 +1,4 @@
-import '../entities/entities.dart';
-import '../repositories/repositories.dart';
+import '../../../account/account.dart';
 
 abstract class GetBankUsecase {
   Future<List<BankEntity>> call();

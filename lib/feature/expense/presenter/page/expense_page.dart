@@ -28,7 +28,7 @@ class _ExpensePageState extends State<ExpensePage> {
   final _numAccountEC = TextEditingController();
   final _localEC = TextEditingController();
   final _reasonEC = TextEditingController();
-  final _bankEC = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   bool _isNegative = false;
@@ -37,7 +37,6 @@ class _ExpensePageState extends State<ExpensePage> {
   String? _selectedReason;
   String? _selectedLocal;
   bool _showLocalEC = false;
-  final bool _showBankEC = false;
   bool _showReasonEC = false;
 
   @override
@@ -226,10 +225,8 @@ class _ExpensePageState extends State<ExpensePage> {
                               MaterialPageRoute(
                                 builder: (_) => BlocProvider(
                                   create: (context) =>
-                                      getIt<SaveAccountCubit>(),
-                                  child: SaveAccountPage(
-                                    bankList: state.expenseBank,
-                                  ),
+                                      getIt<SaveAccountCubit>()..loadBanks(),
+                                  child: const SaveAccountPage(),
                                 ),
                               ),
                             ),
@@ -406,48 +403,6 @@ class _ExpensePageState extends State<ExpensePage> {
                   local: _localEC.text,
                 );
                 context.read<ExpenseCubit>().saveLocal(request);
-              },
-              showProgress: isLoadingState,
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  _saveBank() {
-    return Column(
-      children: [
-        DentrodobolsoTextFormField(
-          label: 'Banco',
-          controller: _bankEC,
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        BlocConsumer<ExpenseCubit, ExpenseState>(
-          listener: (context, state) {
-            if (state is ExpenseErrorState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    state.errorMessage,
-                  ),
-                ),
-              );
-            }
-          },
-          builder: (context, state) {
-            final bool isLoadingState = state is ExpenseLoadingState;
-            return AppButton(
-              key: const Key('save-account'),
-              text: 'Salvar banco',
-              onPressed: () {
-                final request = BankEntity(
-                  id: 0,
-                  instituicao: _bankEC.text,
-                );
-                context.read<ExpenseCubit>().saveBank(request);
               },
               showProgress: isLoadingState,
             );

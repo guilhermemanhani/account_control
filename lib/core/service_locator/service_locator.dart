@@ -66,26 +66,6 @@ void initServiceLocator() {
     ),
   );
 
-  // ? bank get
-
-  getIt.registerSingleton<BankDatasource>(
-    BankDatasourceImpl(
-      sqliteConnectionFactory: getIt(),
-    ),
-  );
-
-  getIt.registerSingleton<BankRepository>(
-    BankRepositoryImpl(
-      bankDatasource: getIt(),
-    ),
-  );
-
-  getIt.registerSingleton<GetBankUsecase>(
-    GetBankUsecaseImpl(
-      bankRepository: getIt(),
-    ),
-  );
-
   // ? local get
 
   getIt.registerSingleton<LocalDatasource>(
@@ -123,26 +103,6 @@ void initServiceLocator() {
   getIt.registerSingleton<GetReasonUsecase>(
     GetReasonUsecaseImpl(
       reasonRepository: getIt(),
-    ),
-  );
-
-  // ? bank save
-
-  getIt.registerSingleton<SaveBankDatasource>(
-    SaveBankDatasourceImpl(
-      sqliteConnectionFactory: getIt(),
-    ),
-  );
-
-  getIt.registerSingleton<SaveBankRepository>(
-    SaveBankRepositoryImpl(
-      saveBankDatasource: getIt(),
-    ),
-  );
-
-  getIt.registerSingleton<SaveBankUsecase>(
-    SaveBankUsecaseImpl(
-      bankRepository: getIt(),
     ),
   );
 
@@ -189,10 +149,8 @@ void initServiceLocator() {
   getIt.registerFactory<ExpenseCubit>(
     () => ExpenseCubit(
       accountUsecase: getIt(),
-      bankUsecase: getIt(),
       localUsecase: getIt(),
       reasonUsecase: getIt(),
-      saveBankUsecase: getIt(),
       saveLocalUsecase: getIt(),
       saveReasonUsecase: getIt(),
     ),
@@ -218,9 +176,51 @@ void initServiceLocator() {
     ),
   );
 
+  // ? bank save
+
+  getIt.registerSingleton<SaveBankDatasource>(
+    SaveBankDatasourceImpl(
+      sqliteConnectionFactory: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<SaveBankRepository>(
+    SaveBankRepositoryImpl(
+      saveBankDatasource: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<SaveBankUsecase>(
+    SaveBankUsecaseImpl(
+      bankRepository: getIt(),
+    ),
+  );
+
+  // ? bank get
+
+  getIt.registerSingleton<BankDatasource>(
+    BankDatasourceImpl(
+      sqliteConnectionFactory: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<BankRepository>(
+    BankRepositoryImpl(
+      bankDatasource: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<GetBankUsecase>(
+    GetBankUsecaseImpl(
+      bankRepository: getIt(),
+    ),
+  );
+
   getIt.registerFactory<SaveAccountCubit>(
     () => SaveAccountCubit(
       usecase: getIt(),
+      getBankUsecase: getIt(),
+      saveBankUsecase: getIt(),
     ),
   );
 }

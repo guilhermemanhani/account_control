@@ -1,4 +1,4 @@
-import '../../domain/entities/entities.dart';
+import '../../../account/account.dart';
 
 class BankEntityMapper {
   static BankEntity fromJson(Map<String, dynamic> json) {

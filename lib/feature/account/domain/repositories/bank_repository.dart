@@ -1,4 +1,4 @@
-import '../../domain/entities/entities.dart';
+import '../../../account/account.dart';
 
 abstract class BankRepository {
   Future<List<BankEntity>> getBank();

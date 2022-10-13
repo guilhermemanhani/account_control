@@ -1,7 +1,5 @@
 import '../../../../core/database/database.dart';
-import '../../domain/entities/entities.dart';
-import '../../external/mappers/mappers.dart';
-import '../../infra/datasource/datasource.dart';
+import '../../../account/account.dart';
 
 class BankDatasourceImpl implements BankDatasource {
   final SqliteConnectionFactory _sqliteConnectionFactory;

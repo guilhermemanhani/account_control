@@ -1,6 +1,4 @@
-import '../../domain/entities/entities.dart';
-import '../../domain/repositories/repositories.dart';
-import '../datasource/datasource.dart';
+import '../../../account/account.dart';
 
 class BankRepositoryImpl implements BankRepository {
   final BankDatasource _bankDatasource;

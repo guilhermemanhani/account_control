@@ -1,5 +1,4 @@
-import '../entities/entities.dart';
-import '../repositories/repositories.dart';
+import '../../../account/account.dart';
 
 abstract class SaveBankUsecase {
   Future<bool> call({required BankEntity bank});
