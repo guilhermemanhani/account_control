@@ -412,3 +412,61 @@ class _ExpensePageState extends State<ExpensePage> {
     );
   }
 }
+
+class _SuccessDialogWidget extends StatelessWidget {
+  final String _mensage;
+  final String _question;
+  const _SuccessDialogWidget({
+    Key? key,
+    required String mensage,
+    required String question,
+  })  : _mensage = mensage,
+        _question = question,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(24.0))),
+      backgroundColor: context.white,
+      icon: const Icon(
+        Icons.check_circle_outline,
+        color: Colors.green,
+        size: 48,
+      ),
+      title: Text(_mensage),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(_question),
+        ],
+      ),
+      actionsPadding: const EdgeInsets.symmetric(
+        horizontal: 24,
+        vertical: 24,
+      ),
+      actions: [
+        TextIconButton(
+          icon: Icons.check_circle_outline,
+          title: 'Sim',
+          color: context.green,
+          width: 110,
+          onTap: () => Navigator.pop(context),
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        TextIconButton(
+            icon: Icons.cancel_outlined,
+            title: 'Não',
+            color: context.red,
+            width: 110,
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }),
+      ],
+    );
+  }
+}

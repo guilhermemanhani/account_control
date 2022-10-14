@@ -140,7 +140,10 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                       if (state is SaveAccountSuccessState) {
                         showDialog(
                           context: context,
-                          builder: (_) => const _SuccessDialogWidget(),
+                          builder: (_) => const _SuccessDialogWidget(
+                            mensage: 'Conta inserida com sucesso',
+                            question: 'Deseja inserir outro dado?',
+                          ),
                         );
                       }
                       if (state is SaveAccountErrorState) {
@@ -193,6 +196,15 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
         ),
         BlocConsumer<SaveAccountCubit, SaveAccountState>(
           listener: (context, state) {
+            if (state is SaveBankSuccessState) {
+              showDialog(
+                context: context,
+                builder: (_) => const _SuccessDialogWidget(
+                  mensage: 'Banco inserido com sucesso',
+                  question: 'Deseja inserir outro dado?',
+                ),
+              );
+            }
             if (state is SaveAccountErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -225,19 +237,37 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
 }
 
 class _SuccessDialogWidget extends StatelessWidget {
+  final String _mensage;
+  final String _question;
   const _SuccessDialogWidget({
     Key? key,
-  }) : super(key: key);
+    required String mensage,
+    required String question,
+  })  : _mensage = mensage,
+        _question = question,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(24.0))),
+      backgroundColor: context.white,
+      icon: const Icon(
+        Icons.check_circle_outline,
+        color: Colors.green,
+        size: 48,
+      ),
+      title: Text(_mensage),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        children: const [
-          Text('Conta inserida com sucesso'),
-          Text('Deseja inserir outra conta?'),
+        children: [
+          Text(_question),
         ],
+      ),
+      actionsPadding: const EdgeInsets.symmetric(
+        horizontal: 24,
+        vertical: 24,
       ),
       actions: [
         TextIconButton(
