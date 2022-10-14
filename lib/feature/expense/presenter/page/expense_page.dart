@@ -313,17 +313,52 @@ class _ExpensePageState extends State<ExpensePage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final formValid = _formKey.currentState?.validate() ?? false;
-          if (formValid) {
-            // controller.saveExpense(
-            //   _descriptionEC.text,
-            //   _controllerMoneyExpense.numberValue,
-            // );
+      floatingActionButton: BlocConsumer<ExpenseCubit, ExpenseState>(
+        listener: (context, state) {
+          if (state is SaveReasonSuccessState) {
+            showDialog(
+              context: context,
+              builder: (_) => const _SuccessDialogWidget(
+                mensage: 'Motivo inserido com sucesso',
+                question: 'Deseja inserir mais?',
+              ),
+            );
+          }
+          if (state is ExpenseErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  state.errorMessage,
+                ),
+              ),
+            );
           }
         },
-        child: const Icon(Icons.payment),
+        builder: (context, state) {
+          final bool isLoadingState = state is ExpenseLoadingState;
+          return FloatingActionButton(
+            key: const Key('save-account'),
+            onPressed: () {
+              //     final formValid = _formKey.currentState?.validate() ?? false;
+              //     if (formValid) {
+              //       // controller.saveExpense(
+              //       //   _descriptionEC.text,
+              //       //   _controllerMoneyExpense.numberValue,
+              //       // );
+              //     }
+              // final request = ReasonEntity(
+              //   id: 0,
+              //   motivo: _reasonEC.text,
+              // );
+              // context.read<ExpenseCubit>().saveReason(request);
+            },
+            child: isLoadingState
+                ? const CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : const Icon(Icons.payment),
+          );
+        },
       ),
     );
   }
@@ -340,6 +375,15 @@ class _ExpensePageState extends State<ExpensePage> {
         ),
         BlocConsumer<ExpenseCubit, ExpenseState>(
           listener: (context, state) {
+            if (state is SaveReasonSuccessState) {
+              showDialog(
+                context: context,
+                builder: (_) => const _SuccessDialogWidget(
+                  mensage: 'Motivo inserido com sucesso',
+                  question: 'Deseja inserir mais?',
+                ),
+              );
+            }
             if (state is ExpenseErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -382,6 +426,15 @@ class _ExpensePageState extends State<ExpensePage> {
         ),
         BlocConsumer<ExpenseCubit, ExpenseState>(
           listener: (context, state) {
+            if (state is SaveLocalSuccessState) {
+              showDialog(
+                context: context,
+                builder: (_) => const _SuccessDialogWidget(
+                  mensage: 'Local inserido com sucesso',
+                  question: 'Deseja inserir mais?',
+                ),
+              );
+            }
             if (state is ExpenseErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

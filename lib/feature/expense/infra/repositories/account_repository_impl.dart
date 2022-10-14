@@ -9,9 +9,9 @@ class AccountRepositoryImpl implements AccountRepository {
     required AccountDatasource accountDatasource,
   }) : _accountDatasource = accountDatasource;
   @override
-  Future<List<AccountEntity>> getAccount() async {
+  Future<List<AccountEntity>> getAccounts() async {
     try {
-      return await _accountDatasource.getAccount();
+      return await _accountDatasource.getAccounts();
     } catch (e) {
       throw Exception(e);
     }

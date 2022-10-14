@@ -14,6 +14,6 @@ class GetAccountUsecaseImpl implements GetAccountUsecase {
 
   @override
   Future<List<AccountEntity>> call() async {
-    return await _accountRepository.getAccount();
+    return await _accountRepository.getAccounts();
   }
 }

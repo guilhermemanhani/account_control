@@ -29,7 +29,7 @@ void main() {
       ),
     ];
 
-    when(() => repository.getAccount()).thenAnswer(
+    when(() => repository.getAccounts()).thenAnswer(
       (_) async => response,
     );
 

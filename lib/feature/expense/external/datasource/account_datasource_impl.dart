@@ -10,12 +10,25 @@ class AccountDatasourceImpl implements AccountDatasource {
       : _sqliteConnectionFactory = sqliteConnectionFactory;
 
   @override
-  Future<List<AccountEntity>> getAccount() async {
+  Future<List<AccountEntity>> getAccounts() async {
     final conn = await _sqliteConnectionFactory.openConnection();
     final result = await conn.rawQuery('''
       select C.*, B.instituicao from conta C
       inner join BANCO B on B.id = C.idbanco
     ''');
     return result.map((e) => AccountEntityMapper.fromJson(e)).toList();
+  }
+
+  @override
+  Future<AccountEntity> getAccount({required int id}) async {
+    final conn = await _sqliteConnectionFactory.openConnection();
+    final result = await conn.rawQuery(
+      '''
+      select * from conta
+      where id = ?
+    ''',
+      [id],
+    );
+    return result.map((e) => AccountEntityMapper.fromJson(e)).toList().first;
   }
 }
