@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blueGrey,
       ),
       home: BlocProvider(
-        create: (_) => getIt<HomeAppCubit>(),
+        create: (_) => getIt<HomeAppCubit>()..loadAccounts(),
         child: const HomePage(),
       ),
     );

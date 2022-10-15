@@ -89,10 +89,12 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                                 icon: const Icon(
                                   Icons.keyboard_arrow_down_sharp,
                                 ),
-                                hint: const Text('Local'),
+                                hint: const Text('Banco'),
                                 value: _bankSelected,
                                 onChanged: (value) => setState(() {
                                   _bankSelected = value!;
+                                  _bankSelectedIndex =
+                                      state.accountBank.first.id;
                                 }),
                                 items: state.accountBank.map(
                                   (BankEntity map) {

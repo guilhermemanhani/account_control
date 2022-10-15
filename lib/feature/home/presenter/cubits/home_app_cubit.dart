@@ -11,12 +11,12 @@ class HomeAppCubit extends Cubit<HomeState> {
           HomeInitialState(),
         );
   Future<void> loadAccounts() async {
-    // emit(const MoviesLoadingState());
-    // try {
-    //   final result = await getMoviesUsecase.call();
-    //   emit(MoviesLoadedState(movies: result));
-    // } on MovieFailure catch (error) {
-    //   emit(MoviesErrorState(errorMessage: error.errorMessage));
-    // }
+    emit(const HomeLoadingState());
+    try {
+      final result = await _usecase.call();
+      emit(HomeLoadedState(home: result));
+    } catch (error) {
+      emit(HomeErrorState(errorMessage: error.toString()));
+    }
   }
 }

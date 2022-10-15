@@ -9,8 +9,11 @@ class AccountInfoRepositoryImpl implements AccountInfoRepository {
     required AccountInfoDatasource accountDatasource,
   }) : _accountDatasource = accountDatasource;
   @override
-  Future<List<AccountInfoEntity>> getAccountInfo() {
-    // TODO: implement getAccountInfo
-    throw UnimplementedError();
+  Future<List<AccountInfoEntity>> getAccountInfo() async {
+    try {
+      return await _accountDatasource.getAccountInfo();
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

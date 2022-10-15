@@ -4,6 +4,7 @@ import 'package:account_control/feature/home/presenter/cubits/home_app_cubit.dar
 import 'package:account_control/feature/home/presenter/cubits/home_state.dart';
 import 'package:account_control/feature/home/presenter/widgets/container_budget.dart';
 import 'package:account_control/feature/home/presenter/widgets/head_home.dart';
+import 'package:account_control/feature/home/presenter/widgets/line_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,23 +23,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // final autoRunDisposer = autorun(
-    //   (_) {
-    //     controller.loadHome();
-    //     // controller.loadAccounts();
-    //     // controller.findPeriod();
-    //     // controller.getExpenseByLocal();
-    //   },
-    // );
-    // reactionDisposer.add(autoRunDisposer);
   }
 
   @override
   void dispose() {
     super.dispose();
-    // for (var element in reactionDisposer) {
-    //   element();
-    // }
   }
 
   @override
@@ -51,23 +40,40 @@ class _HomePageState extends State<HomePage> {
           },
           builder: (context, state) {
             return Column(
-              children: const [
-                HeadHome(
+              children: [
+                const HeadHome(
                   value: '0',
                   // value: controller.dealMoneyValue(formatter.format(
                   //     DecimalIntl(controller.accountInfoModel?.balance ??
                   //         Decimal.parse('0.0')))),
                 ),
 
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
-                // LineAccount(
-                //   accountList: controller.accountInfoModel?.listAccount ??
-                //       <AccountModel>[],
-                // ),
 
-                ContainerBudget(
+                BlocBuilder<HomeAppCubit, HomeState>(
+                  builder: (context, state) {
+                    if (state is HomeLoadingState) {
+                      return const Center(
+                        key: Key('circular-progress-indicator'),
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is HomeLoadedState) {
+                      return LineAccount(
+                        accountList: state.home,
+                      );
+                    } else if (state is HomeErrorState) {
+                      return Center(
+                        key: const Key('expense-error-message'),
+                        child: Text(state.errorMessage),
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
+
+                const ContainerBudget(
                   entryD: 2.2, // controller.entry,
                   exitD: 22, // controller.exit,
                   entry: '22', // controller.dealMoneyValue(formatter.format(
@@ -111,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                 // }
                 // },
                 // ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 // Observer(
@@ -145,7 +151,7 @@ class _HomePageState extends State<HomePage> {
                 //     }
                 //   },
                 // ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
               ],
