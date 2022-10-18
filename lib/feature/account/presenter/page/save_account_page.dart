@@ -93,13 +93,14 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                                 value: _bankSelected,
                                 onChanged: (value) => setState(() {
                                   _bankSelected = value!;
-                                  _bankSelectedIndex =
-                                      state.accountBank.first.id;
                                 }),
                                 items: state.accountBank.map(
                                   (BankEntity map) {
                                     return DropdownMenuItem<String>(
                                       value: map.id.toString(),
+                                      onTap: () => setState(() {
+                                        _bankSelectedIndex = map.id;
+                                      }),
                                       child: Text(
                                         map.instituicao,
                                       ),

@@ -36,6 +36,9 @@ class _ExpensePageState extends State<ExpensePage> {
   String? _selectedAccount;
   String? _selectedReason;
   String? _selectedLocal;
+  int? _localId;
+  int? _reasonId;
+  int? _accountId;
   bool _showLocalEC = false;
   bool _showReasonEC = false;
 
@@ -141,6 +144,9 @@ class _ExpensePageState extends State<ExpensePage> {
                                 (LocalEntity map) {
                                   return DropdownMenuItem<String>(
                                     value: map.id.toString(),
+                                    onTap: () => setState(() {
+                                      _localId = map.id;
+                                    }),
                                     child: Text(
                                       map.local,
                                     ),
@@ -206,8 +212,9 @@ class _ExpensePageState extends State<ExpensePage> {
                                 (AccountEntity map) {
                                   return DropdownMenuItem<String>(
                                     value: map.id.toString(),
-                                    // onTap: () =>
-                                    //     state.expenseAccount.setIdAcccount(map.id),
+                                    onTap: () => setState(() {
+                                      _accountId = map.id;
+                                    }),
                                     child: Text(
                                       '${map.instituicao} ${map.conta}',
                                     ),
@@ -274,6 +281,9 @@ class _ExpensePageState extends State<ExpensePage> {
                                 (ReasonEntity map) {
                                   return DropdownMenuItem<String>(
                                     value: map.id.toString(),
+                                    onTap: () => setState(() {
+                                      _reasonId = map.id;
+                                    }),
                                     child: Text(
                                       map.motivo,
                                     ),
@@ -315,11 +325,11 @@ class _ExpensePageState extends State<ExpensePage> {
       ),
       floatingActionButton: BlocConsumer<ExpenseCubit, ExpenseState>(
         listener: (context, state) {
-          if (state is SaveReasonSuccessState) {
+          if (state is SaveExpenseSuccessState) {
             showDialog(
               context: context,
               builder: (_) => const _SuccessDialogWidget(
-                mensage: 'Motivo inserido com sucesso',
+                mensage: 'Lançamento salvo com sucesso!',
                 question: 'Deseja inserir mais?',
               ),
             );
@@ -346,11 +356,20 @@ class _ExpensePageState extends State<ExpensePage> {
               //       //   _controllerMoneyExpense.numberValue,
               //       // );
               //     }
-              // final request = ReasonEntity(
-              //   id: 0,
-              //   motivo: _reasonEC.text,
-              // );
-              // context.read<ExpenseCubit>().saveReason(request);
+              final request = ExpenseEntity(
+                descricao: _descriptionEC.text,
+                valor: _controllerMoneyExpense.numberValue,
+                tpagamento: _isNegative == true ? 0 : 1,
+                datahora: _selectedDate,
+                idlancamento: 0,
+                instituicao: _selectedAccount!,
+                localid: _localId!,
+                motivoid: _reasonId!,
+                idconta: _accountId!,
+                local: _localEC.text,
+                motivo: _reasonEC.text,
+              );
+              context.read<ExpenseCubit>().saveExpense(request);
             },
             child: isLoadingState
                 ? const CircularProgressIndicator(

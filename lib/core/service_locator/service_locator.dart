@@ -146,6 +146,37 @@ void initServiceLocator() {
     ),
   );
 
+  // ? account save
+
+  // getIt.registerSingleton<AccountDatasource>(
+  //   AccountDatasourceImpl(
+  //     sqliteConnectionFactory: getIt(),
+  //   ),
+  // );
+  // AccountDatasource
+  // AccountDatasource
+
+  // ? expense save
+
+  getIt.registerSingleton<SaveExpenseDatasource>(
+    SaveExpenseDatasourceImpl(
+      sqliteConnectionFactory: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<SaveExpenseRepository>(
+    SaveExpenseRepositoryImpl(
+      saveExpenseDatasource: getIt(),
+      accountDatasource: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<SaveExpenseUsecase>(
+    SaveExpenseUsecaseImpl(
+      expenseRepository: getIt(),
+    ),
+  );
+
   getIt.registerFactory<ExpenseCubit>(
     () => ExpenseCubit(
       accountUsecase: getIt(),
@@ -153,6 +184,7 @@ void initServiceLocator() {
       reasonUsecase: getIt(),
       saveLocalUsecase: getIt(),
       saveReasonUsecase: getIt(),
+      saveExpenseUsecase: getIt(),
     ),
   );
 

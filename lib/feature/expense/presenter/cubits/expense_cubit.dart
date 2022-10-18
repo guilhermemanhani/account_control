@@ -11,6 +11,7 @@ class ExpenseCubit extends Cubit<ExpenseState> {
   final GetLocalUsecase _localUsecase;
   final SaveReasonUsecase _saveReasonUsecase;
   final SaveLocalUsecase _saveLocalUsecase;
+  final SaveExpenseUsecase _saveExpenseUsecase;
 
   ExpenseCubit({
     required GetAccountUsecase accountUsecase,
@@ -18,11 +19,13 @@ class ExpenseCubit extends Cubit<ExpenseState> {
     required GetLocalUsecase localUsecase,
     required SaveLocalUsecase saveLocalUsecase,
     required SaveReasonUsecase saveReasonUsecase,
+    required SaveExpenseUsecase saveExpenseUsecase,
   })  : _accountUsecase = accountUsecase,
         _reasonUsecase = reasonUsecase,
         _localUsecase = localUsecase,
         _saveReasonUsecase = saveReasonUsecase,
         _saveLocalUsecase = saveLocalUsecase,
+        _saveExpenseUsecase = saveExpenseUsecase,
         super(ExpenseInitialState());
 
   Future<void> loadScreen() async {
@@ -95,6 +98,20 @@ class ExpenseCubit extends Cubit<ExpenseState> {
       loadScreen();
     } catch (error) {
       emit(ExpenseErrorState(errorMessage: error.toString()));
+    }
+  }
+
+  Future<bool> saveExpense(ExpenseEntity expense) async {
+    emit(const ExpenseLoadingState());
+    try {
+      final result = await _saveExpenseUsecase.call(expense: expense);
+      debugPrint(result.toString());
+      emit(SaveExpenseSuccessState(success: true));
+      loadScreen();
+      return true;
+    } catch (error) {
+      emit(ExpenseErrorState(errorMessage: error.toString()));
+      return false;
     }
   }
 }

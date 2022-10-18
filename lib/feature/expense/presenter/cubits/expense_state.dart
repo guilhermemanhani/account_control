@@ -15,7 +15,6 @@ class ExpenseLoadingState extends ExpenseState {
 
 class ExpenseScreenLoadedState extends ExpenseState {
   final List<AccountEntity> expenseAccount;
-
   final List<ReasonEntity> expenseReason;
   final List<LocalEntity> expenseLocal;
 
@@ -27,7 +26,6 @@ class ExpenseScreenLoadedState extends ExpenseState {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
     return other is ExpenseScreenLoadedState &&
         listEquals(other.expenseAccount, expenseAccount) &&
         listEquals(other.expenseReason, expenseReason) &&
@@ -119,6 +117,22 @@ class SaveLocalSuccessState extends ExpenseState {
     if (identical(this, other)) return true;
 
     return other is SaveLocalSuccessState && other.success == success;
+  }
+
+  @override
+  int get hashCode => success.hashCode;
+}
+
+class SaveExpenseSuccessState extends ExpenseState {
+  final bool success;
+
+  SaveExpenseSuccessState({required this.success});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is SaveExpenseSuccessState && other.success == success;
   }
 
   @override
