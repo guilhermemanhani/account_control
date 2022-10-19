@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:validatorless/validatorless.dart';
 
 import '../../../../core/ui/widgets/widgets.dart';
 import '../../../account/presenter/presenter.dart';
@@ -67,7 +68,7 @@ class _ExpensePageState extends State<ExpensePage> {
           key: _formKey,
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -87,6 +88,7 @@ class _ExpensePageState extends State<ExpensePage> {
                       child: DentrodobolsoTextFormField(
                         controller: _controllerMoneyExpense,
                         label: 'valor',
+                        validator: Validatorless.required('Campo obrigatório'),
                         textInputType: TextInputType.number,
                         textInputAction: TextInputAction.next,
                         // validator:
@@ -111,6 +113,7 @@ class _ExpensePageState extends State<ExpensePage> {
                 ),
                 DentrodobolsoTextFormField(
                   label: 'Descrição',
+                  validator: Validatorless.required('Campo obrigatório'),
                   controller: _descriptionEC,
                 ),
                 const SizedBox(
@@ -127,16 +130,21 @@ class _ExpensePageState extends State<ExpensePage> {
                       return Row(
                         children: [
                           DentrodobolsoDropDownButton(
-                            widget: DropdownButton<String>(
+                            widget: DropdownButtonFormField<String>(
                               isExpanded: true,
-                              underline: Container(
-                                width: double.infinity,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(16)),
+                                    borderSide: BorderSide(width: 1)),
                               ),
                               icon: const Icon(
                                 Icons.keyboard_arrow_down_sharp,
                               ),
                               hint: const Text('Local'),
                               value: _selectedLocal,
+                              validator:
+                                  Validatorless.required('Campo obrigatório'),
                               onChanged: (value) => setState(() {
                                 _selectedLocal = value!;
                               }),
@@ -195,16 +203,21 @@ class _ExpensePageState extends State<ExpensePage> {
                       return Row(
                         children: [
                           DentrodobolsoDropDownButton(
-                            widget: DropdownButton<String>(
+                            widget: DropdownButtonFormField<String>(
                               isExpanded: true,
-                              underline: Container(
-                                width: double.infinity,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(16)),
+                                    borderSide: BorderSide(width: 1)),
                               ),
                               icon: const Icon(
                                 Icons.keyboard_arrow_down_sharp,
                               ),
                               hint: const Text('Conta'),
                               value: _selectedAccount,
+                              validator:
+                                  Validatorless.required('Campo obrigatório'),
                               onChanged: (value) => setState(() {
                                 _selectedAccount = value!;
                               }),
@@ -264,15 +277,20 @@ class _ExpensePageState extends State<ExpensePage> {
                       return Row(
                         children: [
                           DentrodobolsoDropDownButton(
-                            widget: DropdownButton<String>(
+                            widget: DropdownButtonFormField<String>(
                               isExpanded: true,
-                              underline: Container(
-                                width: double.infinity,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(16)),
+                                    borderSide: BorderSide(width: 1)),
                               ),
                               icon: const Icon(
                                 Icons.keyboard_arrow_down_sharp,
                               ),
                               hint: const Text('Motivo'),
+                              validator:
+                                  Validatorless.required('Campo obrigatório'),
                               value: _selectedReason,
                               onChanged: (value) => setState(() {
                                 _selectedReason = value!;
@@ -349,27 +367,23 @@ class _ExpensePageState extends State<ExpensePage> {
           return FloatingActionButton(
             key: const Key('save-account'),
             onPressed: () {
-              //     final formValid = _formKey.currentState?.validate() ?? false;
-              //     if (formValid) {
-              //       // controller.saveExpense(
-              //       //   _descriptionEC.text,
-              //       //   _controllerMoneyExpense.numberValue,
-              //       // );
-              //     }
-              final request = ExpenseEntity(
-                descricao: _descriptionEC.text,
-                valor: _controllerMoneyExpense.numberValue,
-                tpagamento: _isNegative == true ? 0 : 1,
-                datahora: _selectedDate,
-                idlancamento: 0,
-                instituicao: _selectedAccount!,
-                localid: _localId!,
-                motivoid: _reasonId!,
-                idconta: _accountId!,
-                local: _localEC.text,
-                motivo: _reasonEC.text,
-              );
-              context.read<ExpenseCubit>().saveExpense(request);
+              final formValid = _formKey.currentState?.validate() ?? false;
+              if (formValid) {
+                final request = ExpenseEntity(
+                  descricao: _descriptionEC.text,
+                  valor: _controllerMoneyExpense.numberValue,
+                  tpagamento: _isNegative == true ? 0 : 1,
+                  datahora: _selectedDate,
+                  idlancamento: 0,
+                  instituicao: _selectedAccount!,
+                  localid: _localId!,
+                  motivoid: _reasonId!,
+                  idconta: _accountId!,
+                  local: _localEC.text,
+                  motivo: _reasonEC.text,
+                );
+                context.read<ExpenseCubit>().saveExpense(request);
+              }
             },
             child: isLoadingState
                 ? const CircularProgressIndicator(
@@ -419,11 +433,14 @@ class _ExpensePageState extends State<ExpensePage> {
               key: const Key('save-account'),
               text: 'Salvar motivo',
               onPressed: () {
-                final request = ReasonEntity(
-                  id: 0,
-                  motivo: _reasonEC.text,
-                );
-                context.read<ExpenseCubit>().saveReason(request);
+                final formValid = _formKey.currentState?.validate() ?? false;
+                if (formValid) {
+                  final request = ReasonEntity(
+                    id: 0,
+                    motivo: _reasonEC.text,
+                  );
+                  context.read<ExpenseCubit>().saveReason(request);
+                }
               },
               showProgress: isLoadingState,
             );
@@ -470,11 +487,14 @@ class _ExpensePageState extends State<ExpensePage> {
               key: const Key('save-account'),
               text: 'Salvar local',
               onPressed: () {
-                final request = LocalEntity(
-                  id: 0,
-                  local: _localEC.text,
-                );
-                context.read<ExpenseCubit>().saveLocal(request);
+                final formValid = _formKey.currentState?.validate() ?? false;
+                if (formValid) {
+                  final request = LocalEntity(
+                    id: 0,
+                    local: _localEC.text,
+                  );
+                  context.read<ExpenseCubit>().saveLocal(request);
+                }
               },
               showProgress: isLoadingState,
             );

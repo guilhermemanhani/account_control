@@ -3,6 +3,7 @@ import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:validatorless/validatorless.dart';
 
 import '../../../../core/ui/widgets/widgets.dart';
 import '../../domain/entities/entities.dart';
@@ -51,10 +52,12 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                     label: 'conta',
                     textInputType: TextInputType.number,
                     textInputAction: TextInputAction.next,
-                    controller: _numAccountEC,
                     textInputFormatter: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
+                    validator: Validatorless.required('Campo obrigatório'),
+                    controller: _numAccountEC,
+
                     // validator: Validatorless.required('Valor é obrigatório'),
                   ),
                   const SizedBox(
@@ -63,6 +66,10 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                   DentrodobolsoTextFormField(
                     label: 'Valor',
                     controller: _controllerMoneyAccount,
+                    textInputFormatter: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    validator: Validatorless.required('Campo obrigatório'),
                     textInputType: TextInputType.number,
                     textInputAction: TextInputAction.done,
                     // validator: Validatorless.required('Valor é obrigatório'),
@@ -81,14 +88,19 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                         return Row(
                           children: [
                             DentrodobolsoDropDownButton(
-                              widget: DropdownButton<String>(
+                              widget: DropdownButtonFormField<String>(
                                 isExpanded: true,
-                                underline: Container(
-                                  width: double.infinity,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(16)),
+                                      borderSide: BorderSide(width: 1)),
                                 ),
                                 icon: const Icon(
                                   Icons.keyboard_arrow_down_sharp,
                                 ),
+                                validator:
+                                    Validatorless.required('Campo obrigatório'),
                                 hint: const Text('Banco'),
                                 value: _bankSelected,
                                 onChanged: (value) => setState(() {
@@ -166,13 +178,19 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                         key: const Key('save-account'),
                         text: 'Salvar conta',
                         onPressed: () {
-                          final request = SaveAccountEntity(
-                            conta: int.parse(_numAccountEC.text),
-                            id: 0,
-                            idbanco: _bankSelectedIndex!,
-                            saldo: _controllerMoneyAccount.numberValue,
-                          );
-                          context.read<SaveAccountCubit>().saveAccount(request);
+                          final formValid =
+                              _formKey.currentState?.validate() ?? false;
+                          if (formValid) {
+                            final request = SaveAccountEntity(
+                              conta: int.parse(_numAccountEC.text),
+                              id: 0,
+                              idbanco: _bankSelectedIndex!,
+                              saldo: _controllerMoneyAccount.numberValue,
+                            );
+                            context
+                                .read<SaveAccountCubit>()
+                                .saveAccount(request);
+                          }
                         },
                         showProgress: isLoadingState,
                       );
@@ -193,6 +211,7 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
         DentrodobolsoTextFormField(
           label: 'Banco',
           controller: _bankEC,
+          validator: Validatorless.required('Campo obrigatório'),
         ),
         const SizedBox(
           height: 16,
@@ -224,11 +243,14 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
               key: const Key('save-bank'),
               text: 'Salvar banco',
               onPressed: () {
-                final request = BankEntity(
-                  id: 0,
-                  instituicao: _bankEC.text,
-                );
-                context.read<SaveAccountCubit>().saveBank(request);
+                final formValid = _formKey.currentState?.validate() ?? false;
+                if (formValid) {
+                  final request = BankEntity(
+                    id: 0,
+                    instituicao: _bankEC.text,
+                  );
+                  context.read<SaveAccountCubit>().saveBank(request);
+                }
               },
               showProgress: isLoadingState,
             );

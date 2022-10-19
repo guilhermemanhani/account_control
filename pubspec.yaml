@@ -19,6 +19,7 @@ dependencies:
   intl: ^0.17.0
   extended_masked_text: ^2.3.1
   pie_chart: ^5.3.2
+  validatorless: ^1.2.3
 
 dev_dependencies:
   flutter_test:
