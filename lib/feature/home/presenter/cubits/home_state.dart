@@ -1,5 +1,4 @@
-import 'package:account_control/feature/home/domain/entities/account_info_entity.dart';
-import 'package:flutter/foundation.dart';
+import '../../domain/entities/entities.dart';
 
 abstract class HomeState {
   const HomeState();
@@ -13,7 +12,7 @@ class HomeLoadingState extends HomeState {
 }
 
 class HomeLoadedState extends HomeState {
-  final List<AccountInfoEntity> home;
+  final AccountsInfosEntity home;
 
   HomeLoadedState({required this.home});
 
@@ -21,7 +20,7 @@ class HomeLoadedState extends HomeState {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is HomeLoadedState && listEquals(other.home, home);
+    return other is HomeLoadedState && other.home == home;
   }
 
   @override

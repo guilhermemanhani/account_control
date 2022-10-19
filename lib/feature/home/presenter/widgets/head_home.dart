@@ -11,8 +11,8 @@ class HeadHome extends StatelessWidget {
       width: double.infinity,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(24),
-          bottomRight: Radius.circular(24),
+          bottomLeft: Radius.circular(32),
+          bottomRight: Radius.circular(32),
         ),
         gradient: LinearGradient(
           begin: Alignment.topRight,
@@ -24,38 +24,26 @@ class HeadHome extends StatelessWidget {
         ),
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(
-              top: 30,
-              // top: 1.statusBarHeight + 30,
+          const Text(
+            "Total em caixa",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          Container(
-            padding: const EdgeInsets.only(
-              top: 16,
+          Text(
+            'R\$ $value',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 26,
+              fontWeight: FontWeight.w600,
             ),
-            height: 80,
           ),
-          Column(
-            children: [
-              const Text(
-                "Total em caixa",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                value,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 26,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+          const SizedBox(
+            height: 24,
           ),
         ],
       ),

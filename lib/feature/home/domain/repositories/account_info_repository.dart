@@ -1,5 +1,5 @@
-import 'package:account_control/feature/home/domain/entities/account_info_entity.dart';
+import '../entities/entities.dart';
 
 abstract class AccountInfoRepository {
-  Future<List<AccountInfoEntity>> getAccountInfo();
+  Future<AccountsInfosEntity> getAccountInfo();
 }

@@ -1,8 +1,8 @@
-import 'package:account_control/feature/home/domain/entities/account_info_entity.dart';
-import 'package:account_control/feature/home/domain/repositories/account_info_repository.dart';
+import '../entities/entities.dart';
+import '../repositories/repositories.dart';
 
 abstract class GetAccountInfoUsecase {
-  Future<List<AccountInfoEntity>> call();
+  Future<AccountsInfosEntity> call();
 }
 
 class GetAccountInfoUsecaseImpl implements GetAccountInfoUsecase {
@@ -13,7 +13,7 @@ class GetAccountInfoUsecaseImpl implements GetAccountInfoUsecase {
   }) : _accountInfoRepositoryRepository = accountInfoRepositoryRepository;
 
   @override
-  Future<List<AccountInfoEntity>> call() async {
+  Future<AccountsInfosEntity> call() async {
     return await _accountInfoRepositoryRepository.getAccountInfo();
   }
 }

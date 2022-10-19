@@ -2,7 +2,6 @@ import 'package:account_control/feature/expense/presenter/cubits/expense_cubit.d
 import 'package:account_control/feature/expense/presenter/page/expense_page.dart';
 import 'package:account_control/feature/home/presenter/cubits/home_app_cubit.dart';
 import 'package:account_control/feature/home/presenter/cubits/home_state.dart';
-import 'package:account_control/feature/home/presenter/widgets/container_budget.dart';
 import 'package:account_control/feature/home/presenter/widgets/head_home.dart';
 import 'package:account_control/feature/home/presenter/widgets/line_account.dart';
 import 'package:flutter/material.dart';
@@ -34,128 +33,34 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: BlocConsumer<HomeAppCubit, HomeState>(
-          listener: (context, state) {
-            // todo implement listener
-          },
+        child: BlocBuilder<HomeAppCubit, HomeState>(
           builder: (context, state) {
-            return Column(
-              children: [
-                const HeadHome(
-                  value: '0',
-                  // value: controller.dealMoneyValue(formatter.format(
-                  //     DecimalIntl(controller.accountInfoModel?.balance ??
-                  //         Decimal.parse('0.0')))),
-                ),
-
-                const SizedBox(
-                  height: 12,
-                ),
-
-                BlocBuilder<HomeAppCubit, HomeState>(
-                  builder: (context, state) {
-                    if (state is HomeLoadingState) {
-                      return const Center(
-                        key: Key('circular-progress-indicator'),
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state is HomeLoadedState) {
-                      return LineAccount(
-                        accountList: state.home,
-                      );
-                    } else if (state is HomeErrorState) {
-                      return Center(
-                        key: const Key('expense-error-message'),
-                        child: Text(state.errorMessage),
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
-
-                const ContainerBudget(
-                  entryD: 2.2, // controller.entry,
-                  exitD: 22, // controller.exit,
-                  entry: '22', // controller.dealMoneyValue(formatter.format(
-                  // DecimalIntl(Decimal.parse(controller.entry.toString())))),
-                  exit: '22', // controller.dealMoneyValue(formatter.format(
-                  // DecimalIntl(Decimal.parse(controller.exit.toString())))),
-                  budgetUse: '22',
-                  // controller.dealMoneyValue(controller.mathValueBudget()),
-                  entryxsaida:
-                      '22', // controller.dealMoneyValue(formatter.format(
-                  // DecimalIntl(Decimal.parse(controller.entry.toString()) -
-                  // Decimal.parse(controller.exit.toString())))),
-                ),
-
-                // if (controller.dataMapExit.isNotEmpty) {
-                //   return Padding(
-                //     padding: const EdgeInsets.all(16.0),
-                //     child: PieChart(
-                //       dataMap: controller.dataMapExit,
-                //       chartType: ChartType.ring,
-                //       centerText: 'Saídas',
-                //       chartValuesOptions: const ChartValuesOptions(
-                //         showChartValueBackground: true,
-                //         showChartValues: true,
-                //         chartValueBackgroundColor: Colors.transparent,
-                //         decimalPlaces: 0,
-                //         showChartValuesInPercentage: true,
-                //         showChartValuesOutside: false,
-                //       ),
-                //     ),
-                //   );
-                // } else if (controller.expenseLocalExitObs == null ||
-                //     controller.expenseLocalExitObs!.isEmpty) {
-                //   return Container(
-                //     color: Colors.grey,
-                //   );
-                // } else {
-                //   return Container(
-                //     color: Colors.red,
-                //   );
-                // }
-                // },
-                // ),
-                const SizedBox(
-                  height: 16,
-                ),
-                // Observer(
-                //   builder: (_) {
-                //     if (controller.dataMapEntry.isNotEmpty) {
-                //       return Padding(
-                //         padding: const EdgeInsets.all(16.0),
-                //         child: PieChart(
-                //           chartValuesOptions: const ChartValuesOptions(
-                //             showChartValueBackground: true,
-                //             showChartValues: true,
-                //             chartValueBackgroundColor: Colors.transparent,
-                //             decimalPlaces: 0,
-                //             showChartValuesInPercentage: true,
-                //             showChartValuesOutside: false,
-                //           ),
-                //           dataMap: controller.dataMapEntry,
-                //           chartType: ChartType.ring,
-                //           centerText: 'Entradas',
-                //         ),
-                //       );
-                //     } else if (controller.expenseLocalEntryObs == null ||
-                //         controller.expenseLocalEntryObs!.isEmpty) {
-                //       return Container(
-                //         color: Colors.grey,
-                //       );
-                //     } else {
-                //       return Container(
-                //         color: Colors.red,
-                //       );
-                //     }
-                //   },
-                // ),
-                const SizedBox(
-                  height: 40,
-                ),
-              ],
-            );
+            if (state is HomeLoadingState) {
+              return const Center(
+                key: Key('circular-progress-indicator'),
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is HomeLoadedState) {
+              return Column(
+                children: [
+                  HeadHome(
+                    value: state.home.balance,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  LineAccount(
+                    accountList: state.home.accountsInfos,
+                  ),
+                ],
+              );
+            } else if (state is HomeErrorState) {
+              return Center(
+                key: const Key('expense-error-message'),
+                child: Text(state.errorMessage),
+              );
+            }
+            return const SizedBox();
           },
         ),
       ),
@@ -169,8 +74,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           );
-
-          // controller.loadHome();
         },
         child: const Icon(Icons.payment),
       ),
