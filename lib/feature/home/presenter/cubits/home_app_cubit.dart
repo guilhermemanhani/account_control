@@ -1,18 +1,18 @@
 import 'package:bloc/bloc.dart';
 
+import '../../domain/usecases/find_by_period_usecase.dart';
 import '../../domain/usecases/get_account_info_usecase.dart';
-import '../../domain/usecases/get_expense_usecase.dart';
 import 'cubits.dart';
 
 class HomeAppCubit extends Cubit<HomeState> {
   final GetAccountInfoUsecase _usecase;
-  final GetExpenseUsecase _expenseUsecase;
+  final FindByPeriodUsecase _findByPeriodUsecase;
 
   HomeAppCubit(
       {required GetAccountInfoUsecase usecase,
-      required GetExpenseUsecase expenseUsecase})
+      required FindByPeriodUsecase findByPeriodUsecase})
       : _usecase = usecase,
-        _expenseUsecase = expenseUsecase,
+        _findByPeriodUsecase = findByPeriodUsecase,
         super(
           HomeInitialState(),
         );
@@ -20,7 +20,9 @@ class HomeAppCubit extends Cubit<HomeState> {
     emit(const HomeLoadingState());
     try {
       final result = await _usecase.call();
-      final expense = await _expenseUsecase.call();
+      final expense = await _findByPeriodUsecase.call();
+      // getExpenseByLocalExit
+      // getExpenseByLocalEntry
       emit(HomeLoadedState(home: result));
     } catch (error) {
       emit(HomeErrorState(errorMessage: error.toString()));

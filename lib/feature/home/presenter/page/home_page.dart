@@ -55,9 +55,17 @@ class _HomePageState extends State<HomePage> {
                 ],
               );
             } else if (state is HomeErrorState) {
-              return Center(
-                key: const Key('expense-error-message'),
-                child: Text(state.errorMessage),
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                  ),
+                  Center(
+                    key: const Key('expense-error-message'),
+                    child: Text(state.errorMessage),
+                  ),
+                ],
               );
             }
             return const SizedBox();

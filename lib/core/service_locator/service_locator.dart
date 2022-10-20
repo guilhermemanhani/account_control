@@ -52,8 +52,8 @@ void initServiceLocator() {
     ),
   );
 
-  getIt.registerSingleton<GetExpenseUsecase>(
-    GetExpenseUsecaseimpl(
+  getIt.registerSingleton<FindByPeriodUsecase>(
+    FindByPeriodUsecaseImpl(
       expenseRepository: getIt(),
     ),
   );
@@ -61,7 +61,7 @@ void initServiceLocator() {
   getIt.registerFactory<HomeAppCubit>(
     () => HomeAppCubit(
       usecase: getIt(),
-      expenseUsecase: getIt(),
+      findByPeriodUsecase: getIt(),
     ),
   );
 
