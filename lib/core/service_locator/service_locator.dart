@@ -1,9 +1,3 @@
-import 'package:account_control/feature/home/domain/repositories/account_info_repository.dart';
-import 'package:account_control/feature/home/domain/usecases/get_account_info_usecase.dart';
-import 'package:account_control/feature/home/external/datasource/account_info_datasource_impl.dart';
-import 'package:account_control/feature/home/infra/datasource/account_info_datasource.dart';
-import 'package:account_control/feature/home/infra/repositories/account_info_repository_impl.dart';
-import 'package:account_control/feature/home/presenter/cubits/home_app_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../core/database/database.dart';
@@ -14,6 +8,12 @@ import '../../feature/expense/external/datasource/datasource.dart';
 import '../../feature/expense/infra/datasource/datasource.dart';
 import '../../feature/expense/infra/repositories/repositories.dart';
 import '../../feature/expense/presenter/cubits/cubits.dart';
+import '../../feature/home/domain/repositories/repositories.dart';
+import '../../feature/home/domain/usecases/usecases.dart';
+import '../../feature/home/external/datasource/datasource.dart';
+import '../../feature/home/infra/datasource/datasource.dart';
+import '../../feature/home/infra/repositories/repositories.dart';
+import '../../feature/home/presenter/cubits/cubits.dart';
 
 final getIt = GetIt.instance;
 
@@ -40,9 +40,28 @@ void initServiceLocator() {
     ),
   );
 
+  getIt.registerSingleton<ExpenseDatasource>(
+    ExpenseDatasourceImpl(
+      sqliteConnectionFactory: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<ExpenseRepository>(
+    ExpenseRepositoryImpl(
+      expenseDatasource: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<GetExpenseUsecase>(
+    GetExpenseUsecaseimpl(
+      expenseRepository: getIt(),
+    ),
+  );
+
   getIt.registerFactory<HomeAppCubit>(
     () => HomeAppCubit(
       usecase: getIt(),
+      expenseUsecase: getIt(),
     ),
   );
 
