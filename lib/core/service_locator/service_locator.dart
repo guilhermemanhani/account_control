@@ -58,10 +58,29 @@ void initServiceLocator() {
     ),
   );
 
+  getIt.registerSingleton<ExpenseByLocalDatasource>(
+    ExpenseByLocalDatasourceImpl(
+      sqliteConnectionFactory: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<ExpenseByLocalRepository>(
+    ExpenseByLocalRepositoryImpl(
+      expenseDatasource: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<GetExpenseByLocalUsecase>(
+    GetExpenseByLocalUsecaseImpl(
+      expenseRepository: getIt(),
+    ),
+  );
+
   getIt.registerFactory<HomeAppCubit>(
     () => HomeAppCubit(
       usecase: getIt(),
       findByPeriodUsecase: getIt(),
+      getExpenseByLocalUsecase: getIt(),
     ),
   );
 

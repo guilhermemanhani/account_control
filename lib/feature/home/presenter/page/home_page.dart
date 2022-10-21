@@ -1,13 +1,12 @@
-import 'package:account_control/feature/expense/presenter/cubits/expense_cubit.dart';
-import 'package:account_control/feature/expense/presenter/page/expense_page.dart';
-import 'package:account_control/feature/home/presenter/cubits/home_app_cubit.dart';
-import 'package:account_control/feature/home/presenter/cubits/home_state.dart';
-import 'package:account_control/feature/home/presenter/widgets/head_home.dart';
-import 'package:account_control/feature/home/presenter/widgets/line_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 import '../../../../core/service_locator/service_locator.dart';
+import '../../../expense/presenter/cubits/cubits.dart';
+import '../../../expense/presenter/page/expense_page.dart';
+import '../cubits/cubits.dart';
+import '../widgets/widgets.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,8 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // final reactionDisposer = <ReactionDisposer>[];
-  // var formatter = NumberFormat.decimalPattern('pt-BR');
   @override
   void initState() {
     super.initState();
@@ -32,44 +29,89 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: BlocBuilder<HomeAppCubit, HomeState>(
-          builder: (context, state) {
-            if (state is HomeLoadingState) {
-              return const Center(
-                key: Key('circular-progress-indicator'),
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is HomeLoadedState) {
-              return Column(
-                children: [
-                  HeadHome(
-                    value: state.home.balance,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  LineAccount(
-                    accountList: state.home.accountsInfos,
-                  ),
-                ],
-              );
-            } else if (state is HomeErrorState) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                  ),
-                  Center(
-                    key: const Key('expense-error-message'),
-                    child: Text(state.errorMessage),
-                  ),
-                ],
-              );
-            }
-            return const SizedBox();
-          },
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: BlocBuilder<HomeAppCubit, HomeState>(
+            builder: (context, state) {
+              if (state is HomeLoadingState) {
+                return const Center(
+                  key: Key('circular-progress-indicator'),
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is HomeLoadedState) {
+                return Column(
+                  children: [
+                    HeadHome(
+                      value: state.accountsInfosEntity.balance,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    LineAccount(
+                      accountList: state.accountsInfosEntity.accountsInfos,
+                    ),
+                    ContainerBudget(
+                      budgetEntity: state.budgetEntity,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: PieChart(
+                        dataMap: state.expenseByLocalExitEntity.isEmpty
+                            ? const {
+                                'Sem dados': 1,
+                              }
+                            : state.expenseByLocalExitEntity,
+                        chartType: ChartType.ring,
+                        centerText: 'Saídas',
+                        chartValuesOptions: const ChartValuesOptions(
+                          showChartValueBackground: true,
+                          showChartValues: true,
+                          chartValueBackgroundColor: Colors.transparent,
+                          decimalPlaces: 0,
+                          showChartValuesInPercentage: true,
+                          showChartValuesOutside: false,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: PieChart(
+                        chartValuesOptions: const ChartValuesOptions(
+                          showChartValueBackground: true,
+                          showChartValues: true,
+                          chartValueBackgroundColor: Colors.transparent,
+                          decimalPlaces: 0,
+                          showChartValuesInPercentage: true,
+                          showChartValuesOutside: false,
+                        ),
+                        dataMap: state.expenseByLocalEntryEntity.isEmpty
+                            ? const {
+                                'Sem dados': 1,
+                              }
+                            : state.expenseByLocalEntryEntity,
+                        chartType: ChartType.ring,
+                        centerText: 'Entradas',
+                      ),
+                    ),
+                  ],
+                );
+              } else if (state is HomeErrorState) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                    ),
+                    Center(
+                      key: const Key('expense-error-message'),
+                      child: Text(state.errorMessage),
+                    ),
+                  ],
+                );
+              }
+              return const SizedBox();
+            },
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

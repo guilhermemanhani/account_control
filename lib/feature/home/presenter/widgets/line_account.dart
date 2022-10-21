@@ -66,17 +66,9 @@ class _LineAccountState extends State<LineAccount> {
                       height: 4,
                     ),
                     Text(
-                      account.saldo.toString(),
-                      // controller.dealMone
-                      // yValue(
-                      //   formatter.format(
-                      //     DecimalIntl(
-                      //       Decimal.parse(account.saldo.toString()),
-                      //     ),
-                      //   ),
-                      // ),
-
-                      // account.saldo.toString(),
+                      (account.saldo / 100)
+                          .toStringAsFixed(2)
+                          .replaceAll('.', ','),
                       style: TextStyle(
                         color: account.saldo.toString().contains('-')
                             ? Colors.red

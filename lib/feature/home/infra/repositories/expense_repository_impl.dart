@@ -10,10 +10,28 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
   }) : _expenseDatasource = expenseDatasource;
 
   @override
-  Future<List<ExpenseEntity>> getExpense() async {
+  Future<BudgetEntity> getExpense() async {
     try {
       final listExpense = await _expenseDatasource.getExpense();
-      return listExpense;
+      double entry = 0;
+      double exit = 0;
+      for (var element in listExpense) {
+        if (element.tpagamento == 1) {
+          entry += element.valor;
+        } else {
+          exit += element.valor;
+        }
+      }
+      final budget = BudgetEntity(
+        entryD: entry,
+        exitD: exit,
+        entry: (entry / 100).toStringAsFixed(2).replaceAll('.', ','),
+        exit: (exit / 100).toStringAsFixed(2).replaceAll('.', ','),
+        budgetUse: ((exit / entry) * 100).toStringAsFixed(2),
+        entryxsaida:
+            ((entry - exit) / 100).toStringAsFixed(2).replaceAll('.', ','),
+      );
+      return budget;
     } catch (e) {
       throw Exception(e);
     }

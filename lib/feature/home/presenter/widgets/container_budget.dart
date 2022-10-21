@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/entities/budget_entity.dart';
+import '../widgets/widgets.dart';
+
 class ContainerBudget extends StatelessWidget {
-  final double entryD;
-  final double exitD;
-  final String entry;
-  final String exit;
-  final String budgetUse;
-  final String entryxsaida;
+  final BudgetEntity budgetEntity;
   const ContainerBudget({
     Key? key,
-    required this.entryD,
-    required this.exitD,
-    required this.entry,
-    required this.exit,
-    required this.budgetUse,
-    required this.entryxsaida,
+    required this.budgetEntity,
   }) : super(key: key);
 
   @override
@@ -42,11 +35,11 @@ class ContainerBudget extends StatelessWidget {
           ],
         ),
         child: Column(
-          children: const [
-            SizedBox(
+          children: [
+            const SizedBox(
               height: 8,
             ),
-            Text(
+            const Text(
               'Orçamento mensal',
               style: TextStyle(
                 color: Colors.blue,
@@ -55,60 +48,47 @@ class ContainerBudget extends StatelessWidget {
                 fontFamily: 'Allura',
               ),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(vertical: 4.0),
               child: Divider(
                 color: Colors.blue,
                 thickness: 1,
               ),
             ),
-            // Observer(
-            //   builder: (_) {
-            //     return RowInfo(
-            //       colorText: Colors.green,
-            //       title: 'Entrada',
-            //       value: entry,
-            //     );
-            //   },
-            // ),
-            // const SizedBox(
-            //   height: 16,
-            // ),
-            // Observer(
-            //   builder: (_) {
-            //     return RowInfo(
-            //       colorText: Colors.red,
-            //       title: 'Saída',
-            //       value: exit,
-            //     );
-            //   },
-            // ),
-            SizedBox(
+            RowInfo(
+              colorText: Colors.green,
+              title: 'Entrada',
+              value: budgetEntity.entry,
+            ),
+            const SizedBox(
               height: 16,
             ),
-            // Observer(
-            //   builder: (_) {
-            //     return RowInfo(
-            //         colorText: exitD < entryD ? Colors.green : Colors.red,
-            //         title: 'Orçamento usado do mês',
-            //         value: "$budgetUse%"
-            //         // '${((controller.exit / controller.entry))}',
-            //         );
-            //   },
-            // ),
-            SizedBox(
+            RowInfo(
+              colorText: Colors.red,
+              title: 'Saída',
+              value: budgetEntity.exit,
+            ),
+            const SizedBox(
               height: 16,
             ),
-            // Observer(
-            //   builder: (_) {
-            //     return RowInfo(
-            //       colorText: Colors.green,
-            //       title: 'Balanço entra/saída',
-            //       value: entryxsaida,
-            //     );
-            //   },
-            // ),
-            SizedBox(
+            RowInfo(
+                colorText: budgetEntity.exitD < budgetEntity.entryD
+                    ? Colors.green
+                    : Colors.red,
+                title: 'Orçamento usado do mês',
+                value: "${budgetEntity.budgetUse}%"
+                // '${((controller.exit / controller.entry))}',
+
+                ),
+            const SizedBox(
+              height: 16,
+            ),
+            RowInfo(
+              colorText: Colors.green,
+              title: 'Balanço entra/saída',
+              value: budgetEntity.entryxsaida,
+            ),
+            const SizedBox(
               height: 16,
             ),
           ],

@@ -2,7 +2,7 @@ import '../entities/entities.dart';
 import '../repositories/repositories.dart';
 
 abstract class FindByPeriodUsecase {
-  Future<List<ExpenseEntity>> call();
+  Future<BudgetEntity> call();
 }
 
 class FindByPeriodUsecaseImpl implements FindByPeriodUsecase {
@@ -13,7 +13,7 @@ class FindByPeriodUsecaseImpl implements FindByPeriodUsecase {
   }) : _expenseRepository = expenseRepository;
 
   @override
-  Future<List<ExpenseEntity>> call() async {
+  Future<BudgetEntity> call() async {
     return await _expenseRepository.getExpense();
   }
 }

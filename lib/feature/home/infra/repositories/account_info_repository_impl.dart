@@ -1,6 +1,6 @@
 import '../../domain/entities/entities.dart';
 import '../../domain/repositories/repositories.dart';
-import '../../infra/datasource/datasource.dart';
+import '../datasource/datasource.dart';
 
 class AccountInfoRepositoryImpl implements AccountInfoRepository {
   final AccountInfoDatasource _accountDatasource;

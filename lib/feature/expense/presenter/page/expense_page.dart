@@ -91,8 +91,6 @@ class _ExpensePageState extends State<ExpensePage> {
                         validator: Validatorless.required('Campo obrigatório'),
                         textInputType: TextInputType.number,
                         textInputAction: TextInputAction.next,
-                        // validator:
-                        //     Validatorless.required('Valor é obrigatório'),
                       ),
                     ),
                   ],
