@@ -27,8 +27,6 @@ class HomeAppCubit extends Cubit<HomeState> {
           await _getExpenseByLocalUsecase.call(entryExit: 0);
       final expenseByLocalEntry =
           await _getExpenseByLocalUsecase.call(entryExit: 1);
-      // getExpenseByLocalExit
-      // getExpenseByLocalEntry
       emit(HomeLoadedState(
         accountsInfosEntity: result,
         expenseByLocalExitEntity: expenseByLocalExit,
@@ -39,18 +37,4 @@ class HomeAppCubit extends Cubit<HomeState> {
       emit(HomeErrorState(errorMessage: error.toString()));
     }
   }
-
-  // Future<void> loadHome() async {
-  //   emit(const HomeLoadingState());
-  //   try {
-  //     final result = await _usecase.call();
-  //      loadAccounts();
-  // findPeriod();
-  // getExpenseByLocal();
-  //     emit(HomeLoadedState(home: result));
-  //   } catch (error) {
-  //     emit(HomeErrorState(errorMessage: error.toString()));
-  //   }
-  // }
-
 }

@@ -19,6 +19,7 @@ class SaveAccountPage extends StatefulWidget {
 
 class _SaveAccountPageState extends State<SaveAccountPage> {
   final _formKey = GlobalKey<FormState>();
+  final _formKeyBank = GlobalKey<FormState>();
   final _numAccountEC = TextEditingController();
   final _controllerMoneyAccount =
       MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
@@ -206,57 +207,61 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
   }
 
   _saveBank() {
-    return Column(
-      children: [
-        DentrodobolsoTextFormField(
-          label: 'Banco',
-          controller: _bankEC,
-          validator: Validatorless.required('Campo obrigatório'),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        BlocConsumer<SaveAccountCubit, SaveAccountState>(
-          listener: (context, state) {
-            if (state is SaveBankSuccessState) {
-              showDialog(
-                context: context,
-                builder: (_) => const _SuccessDialogWidget(
-                  mensage: 'Banco inserido com sucesso',
-                  question: 'Deseja inserir outro dado?',
-                ),
-              );
-            }
-            if (state is SaveAccountErrorState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    state.errorMessage,
+    return Form(
+      key: _formKeyBank,
+      child: Column(
+        children: [
+          DentrodobolsoTextFormField(
+            label: 'Banco',
+            controller: _bankEC,
+            validator: Validatorless.required('Campo obrigatório'),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          BlocConsumer<SaveAccountCubit, SaveAccountState>(
+            listener: (context, state) {
+              if (state is SaveBankSuccessState) {
+                showDialog(
+                  context: context,
+                  builder: (_) => const _SuccessDialogWidget(
+                    mensage: 'Banco inserido com sucesso',
+                    question: 'Deseja inserir outro dado?',
                   ),
-                ),
+                );
+              }
+              if (state is SaveAccountErrorState) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      state.errorMessage,
+                    ),
+                  ),
+                );
+              }
+            },
+            builder: (context, state) {
+              final bool isLoadingState = state is SaveAccountLoadingState;
+              return AppButton(
+                key: const Key('save-bank'),
+                text: 'Salvar banco',
+                onPressed: () {
+                  final formValid =
+                      _formKeyBank.currentState?.validate() ?? false;
+                  if (formValid) {
+                    final request = BankEntity(
+                      id: 0,
+                      instituicao: _bankEC.text,
+                    );
+                    context.read<SaveAccountCubit>().saveBank(request);
+                  }
+                },
+                showProgress: isLoadingState,
               );
-            }
-          },
-          builder: (context, state) {
-            final bool isLoadingState = state is SaveAccountLoadingState;
-            return AppButton(
-              key: const Key('save-bank'),
-              text: 'Salvar banco',
-              onPressed: () {
-                final formValid = _formKey.currentState?.validate() ?? false;
-                if (formValid) {
-                  final request = BankEntity(
-                    id: 0,
-                    instituicao: _bankEC.text,
-                  );
-                  context.read<SaveAccountCubit>().saveBank(request);
-                }
-              },
-              showProgress: isLoadingState,
-            );
-          },
-        ),
-      ],
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -311,8 +316,7 @@ class _SuccessDialogWidget extends StatelessWidget {
             color: context.red,
             width: 110,
             onTap: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.of(context).popUntil((route) => route.isFirst);
             }),
       ],
     );

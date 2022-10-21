@@ -31,6 +31,8 @@ class _ExpensePageState extends State<ExpensePage> {
   final _reasonEC = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+  final _formKeyLocal = GlobalKey<FormState>();
+  final _formKeyReason = GlobalKey<FormState>();
 
   bool _isNegative = false;
   DateTime _selectedDate = DateTime.now();
@@ -63,278 +65,282 @@ class _ExpensePageState extends State<ExpensePage> {
       appBar: AppBar(
         title: const Text('Entradas / Saídas'),
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(Icons.add),
-                    CupertinoSwitch(
-                      activeColor: context.red,
-                      trackColor: context.green,
-                      value: _isNegative,
-                      onChanged: (value) => setState(() {
-                        _isNegative = value;
-                      }),
-                    ),
-                    const Icon(Icons.remove),
-                    Expanded(
-                      child: DentrodobolsoTextFormField(
-                        controller: _controllerMoneyExpense,
-                        label: 'valor',
-                        validator: Validatorless.required('Campo obrigatório'),
-                        textInputType: TextInputType.number,
-                        textInputAction: TextInputAction.next,
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 32.0),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.add),
+                      CupertinoSwitch(
+                        activeColor: context.red,
+                        trackColor: context.green,
+                        value: _isNegative,
+                        onChanged: (value) => setState(() {
+                          _isNegative = value;
+                        }),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                CalendarButton(
-                  onChanged: (val) => setState(() {
-                    _selectedDate = val;
-                  }),
-                  selectdDate: _selectedDate,
-                  width: double.infinity,
-                  buttonLabel: 'Selecione uma data',
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                DentrodobolsoTextFormField(
-                  label: 'Descrição',
-                  validator: Validatorless.required('Campo obrigatório'),
-                  controller: _descriptionEC,
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                BlocBuilder<ExpenseCubit, ExpenseState>(
-                  builder: (context, state) {
-                    if (state is ExpenseLoadingState) {
-                      return const Center(
-                        key: Key('circular-progress-indicator'),
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state is ExpenseScreenLoadedState) {
-                      return Row(
-                        children: [
-                          DentrodobolsoDropDownButton(
-                            widget: DropdownButtonFormField<String>(
-                              isExpanded: true,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(16)),
-                                    borderSide: BorderSide(width: 1)),
+                      const Icon(Icons.remove),
+                      Expanded(
+                        child: DentrodobolsoTextFormField(
+                          controller: _controllerMoneyExpense,
+                          label: 'valor',
+                          validator:
+                              Validatorless.required('Campo obrigatório'),
+                          textInputType: TextInputType.number,
+                          textInputAction: TextInputAction.next,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  CalendarButton(
+                    onChanged: (val) => setState(() {
+                      _selectedDate = val;
+                    }),
+                    selectdDate: _selectedDate,
+                    width: double.infinity,
+                    buttonLabel: 'Selecione uma data',
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  DentrodobolsoTextFormField(
+                    label: 'Descrição',
+                    validator: Validatorless.required('Campo obrigatório'),
+                    controller: _descriptionEC,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  BlocBuilder<ExpenseCubit, ExpenseState>(
+                    builder: (context, state) {
+                      if (state is ExpenseLoadingState) {
+                        return const Center(
+                          key: Key('circular-progress-indicator'),
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (state is ExpenseScreenLoadedState) {
+                        return Row(
+                          children: [
+                            DentrodobolsoDropDownButton(
+                              widget: DropdownButtonFormField<String>(
+                                isExpanded: true,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(16)),
+                                      borderSide: BorderSide(width: 1)),
+                                ),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_sharp,
+                                ),
+                                hint: const Text('Local'),
+                                value: _selectedLocal,
+                                validator:
+                                    Validatorless.required('Campo obrigatório'),
+                                onChanged: (value) => setState(() {
+                                  _selectedLocal = value!;
+                                }),
+                                items: state.expenseLocal.map(
+                                  (LocalEntity map) {
+                                    return DropdownMenuItem<String>(
+                                      value: map.id.toString(),
+                                      onTap: () => setState(() {
+                                        _localId = map.id;
+                                      }),
+                                      child: Text(
+                                        map.local,
+                                      ),
+                                    );
+                                  },
+                                ).toList(),
                               ),
-                              icon: const Icon(
-                                Icons.keyboard_arrow_down_sharp,
-                              ),
-                              hint: const Text('Local'),
-                              value: _selectedLocal,
-                              validator:
-                                  Validatorless.required('Campo obrigatório'),
-                              onChanged: (value) => setState(() {
-                                _selectedLocal = value!;
-                              }),
-                              items: state.expenseLocal.map(
-                                (LocalEntity map) {
-                                  return DropdownMenuItem<String>(
-                                    value: map.id.toString(),
-                                    onTap: () => setState(() {
-                                      _localId = map.id;
-                                    }),
-                                    child: Text(
-                                      map.local,
-                                    ),
-                                  );
-                                },
-                              ).toList(),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          IconButton(
-                            onPressed: () => setState(() {
-                              _showLocalEC = !_showLocalEC;
-                            }),
-                            icon: _showLocalEC
-                                ? const Icon(Icons.remove)
-                                : const Icon(Icons.add),
-                          ),
-                        ],
-                      );
-                    } else if (state is ExpenseErrorState) {
-                      return Center(
-                        key: const Key('expense-error-message'),
-                        child: Text(state.errorMessage),
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
-                SizedBox(
-                  height: _showLocalEC ? 16 : 0,
-                ),
-                _showLocalEC ? _saveLocal() : const SizedBox(),
-                const SizedBox(
-                  height: 16,
-                ),
-                BlocBuilder<ExpenseCubit, ExpenseState>(
-                  builder: (context, state) {
-                    if (state is ExpenseLoadingState) {
-                      return const Center(
-                        key: Key('circular-progress-indicator'),
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state is ExpenseScreenLoadedState) {
-                      return Row(
-                        children: [
-                          DentrodobolsoDropDownButton(
-                            widget: DropdownButtonFormField<String>(
-                              isExpanded: true,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(16)),
-                                    borderSide: BorderSide(width: 1)),
-                              ),
-                              icon: const Icon(
-                                Icons.keyboard_arrow_down_sharp,
-                              ),
-                              hint: const Text('Conta'),
-                              value: _selectedAccount,
-                              validator:
-                                  Validatorless.required('Campo obrigatório'),
-                              onChanged: (value) => setState(() {
-                                _selectedAccount = value!;
-                              }),
-                              items: state.expenseAccount.map(
-                                (AccountEntity map) {
-                                  return DropdownMenuItem<String>(
-                                    value: map.id.toString(),
-                                    onTap: () => setState(() {
-                                      _accountId = map.id;
-                                    }),
-                                    child: Text(
-                                      '${map.instituicao} ${map.conta}',
-                                    ),
-                                  );
-                                },
-                              ).toList(),
+                            const SizedBox(
+                              width: 16,
                             ),
-                          ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          // todo: add bank
-                          IconButton(
-                            onPressed: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => BlocProvider(
-                                  create: (context) =>
-                                      getIt<SaveAccountCubit>()..loadBanks(),
-                                  child: const SaveAccountPage(),
+                            IconButton(
+                              onPressed: () => setState(() {
+                                _showLocalEC = !_showLocalEC;
+                              }),
+                              icon: _showLocalEC
+                                  ? const Icon(Icons.remove)
+                                  : const Icon(Icons.add),
+                            ),
+                          ],
+                        );
+                      } else if (state is ExpenseErrorState) {
+                        return Center(
+                          key: const Key('expense-error-message'),
+                          child: Text(state.errorMessage),
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  ),
+                  SizedBox(
+                    height: _showLocalEC ? 16 : 0,
+                  ),
+                  _showLocalEC ? _saveLocal() : const SizedBox(),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  BlocBuilder<ExpenseCubit, ExpenseState>(
+                    builder: (context, state) {
+                      if (state is ExpenseLoadingState) {
+                        return const Center(
+                          key: Key('circular-progress-indicator'),
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (state is ExpenseScreenLoadedState) {
+                        return Row(
+                          children: [
+                            DentrodobolsoDropDownButton(
+                              widget: DropdownButtonFormField<String>(
+                                isExpanded: true,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(16)),
+                                      borderSide: BorderSide(width: 1)),
+                                ),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_sharp,
+                                ),
+                                hint: const Text('Conta'),
+                                value: _selectedAccount,
+                                validator:
+                                    Validatorless.required('Campo obrigatório'),
+                                onChanged: (value) => setState(() {
+                                  _selectedAccount = value!;
+                                }),
+                                items: state.expenseAccount.map(
+                                  (AccountEntity map) {
+                                    return DropdownMenuItem<String>(
+                                      value: map.id.toString(),
+                                      onTap: () => setState(() {
+                                        _accountId = map.id;
+                                      }),
+                                      child: Text(
+                                        '${map.instituicao} ${map.conta}',
+                                      ),
+                                    );
+                                  },
+                                ).toList(),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            // todo: add bank
+                            IconButton(
+                              onPressed: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => BlocProvider(
+                                    create: (context) =>
+                                        getIt<SaveAccountCubit>()..loadBanks(),
+                                    child: const SaveAccountPage(),
+                                  ),
                                 ),
                               ),
+                              icon: const Icon(Icons.add),
                             ),
-                            icon: const Icon(Icons.add),
-                          ),
-                        ],
-                      );
-                    } else if (state is ExpenseErrorState) {
-                      return Center(
-                        key: const Key('expense-error-message'),
-                        child: Text(state.errorMessage),
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                BlocBuilder<ExpenseCubit, ExpenseState>(
-                  builder: (context, state) {
-                    if (state is ExpenseLoadingState) {
-                      return const Center(
-                        key: Key('circular-progress-indicator'),
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state is ExpenseScreenLoadedState) {
-                      return Row(
-                        children: [
-                          DentrodobolsoDropDownButton(
-                            widget: DropdownButtonFormField<String>(
-                              isExpanded: true,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(16)),
-                                    borderSide: BorderSide(width: 1)),
+                          ],
+                        );
+                      } else if (state is ExpenseErrorState) {
+                        return Center(
+                          key: const Key('expense-error-message'),
+                          child: Text(state.errorMessage),
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  BlocBuilder<ExpenseCubit, ExpenseState>(
+                    builder: (context, state) {
+                      if (state is ExpenseLoadingState) {
+                        return const Center(
+                          key: Key('circular-progress-indicator'),
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (state is ExpenseScreenLoadedState) {
+                        return Row(
+                          children: [
+                            DentrodobolsoDropDownButton(
+                              widget: DropdownButtonFormField<String>(
+                                isExpanded: true,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(16)),
+                                      borderSide: BorderSide(width: 1)),
+                                ),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_sharp,
+                                ),
+                                hint: const Text('Motivo'),
+                                validator:
+                                    Validatorless.required('Campo obrigatório'),
+                                value: _selectedReason,
+                                onChanged: (value) => setState(() {
+                                  _selectedReason = value!;
+                                }),
+                                items: state.expenseReason.map(
+                                  (ReasonEntity map) {
+                                    return DropdownMenuItem<String>(
+                                      value: map.id.toString(),
+                                      onTap: () => setState(() {
+                                        _reasonId = map.id;
+                                      }),
+                                      child: Text(
+                                        map.motivo,
+                                      ),
+                                    );
+                                  },
+                                ).toList(),
                               ),
-                              icon: const Icon(
-                                Icons.keyboard_arrow_down_sharp,
-                              ),
-                              hint: const Text('Motivo'),
-                              validator:
-                                  Validatorless.required('Campo obrigatório'),
-                              value: _selectedReason,
-                              onChanged: (value) => setState(() {
-                                _selectedReason = value!;
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            IconButton(
+                              onPressed: () => setState(() {
+                                _showReasonEC = !_showReasonEC;
                               }),
-                              items: state.expenseReason.map(
-                                (ReasonEntity map) {
-                                  return DropdownMenuItem<String>(
-                                    value: map.id.toString(),
-                                    onTap: () => setState(() {
-                                      _reasonId = map.id;
-                                    }),
-                                    child: Text(
-                                      map.motivo,
-                                    ),
-                                  );
-                                },
-                              ).toList(),
+                              icon: _showReasonEC
+                                  ? const Icon(Icons.remove)
+                                  : const Icon(Icons.add),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          IconButton(
-                            onPressed: () => setState(() {
-                              _showReasonEC = !_showReasonEC;
-                            }),
-                            icon: _showReasonEC
-                                ? const Icon(Icons.remove)
-                                : const Icon(Icons.add),
-                          ),
-                        ],
-                      );
-                    } else if (state is ExpenseErrorState) {
-                      return Center(
-                        key: const Key('expense-error-message'),
-                        child: Text(state.errorMessage),
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
-                SizedBox(
-                  height: _showReasonEC ? 16 : 0,
-                ),
-                _showReasonEC ? _saveReason() : const SizedBox(),
-              ],
+                          ],
+                        );
+                      } else if (state is ExpenseErrorState) {
+                        return Center(
+                          key: const Key('expense-error-message'),
+                          child: Text(state.errorMessage),
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  ),
+                  SizedBox(
+                    height: _showReasonEC ? 16 : 0,
+                  ),
+                  _showReasonEC ? _saveReason() : const SizedBox(),
+                ],
+              ),
             ),
           ),
         ),
@@ -395,110 +401,120 @@ class _ExpensePageState extends State<ExpensePage> {
   }
 
   _saveReason() {
-    return Column(
-      children: [
-        DentrodobolsoTextFormField(
-          label: 'Motivo',
-          controller: _reasonEC,
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        BlocConsumer<ExpenseCubit, ExpenseState>(
-          listener: (context, state) {
-            if (state is SaveReasonSuccessState) {
-              showDialog(
-                context: context,
-                builder: (_) => const _SuccessDialogWidget(
-                  mensage: 'Motivo inserido com sucesso',
-                  question: 'Deseja inserir mais?',
-                ),
-              );
-            }
-            if (state is ExpenseErrorState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    state.errorMessage,
+    return Form(
+      key: _formKeyReason,
+      child: Column(
+        children: [
+          DentrodobolsoTextFormField(
+            label: 'Motivo',
+            controller: _reasonEC,
+            validator: Validatorless.required('Campo obrigatório'),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          BlocConsumer<ExpenseCubit, ExpenseState>(
+            listener: (context, state) {
+              if (state is SaveReasonSuccessState) {
+                showDialog(
+                  context: context,
+                  builder: (_) => const _SuccessDialogWidget(
+                    mensage: 'Motivo inserido com sucesso',
+                    question: 'Deseja inserir mais?',
                   ),
-                ),
+                );
+              }
+              if (state is ExpenseErrorState) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      state.errorMessage,
+                    ),
+                  ),
+                );
+              }
+            },
+            builder: (context, state) {
+              final bool isLoadingState = state is ExpenseLoadingState;
+              return AppButton(
+                key: const Key('save-account'),
+                text: 'Salvar motivo',
+                onPressed: () {
+                  final formValid =
+                      _formKeyReason.currentState?.validate() ?? false;
+                  if (formValid) {
+                    final request = ReasonEntity(
+                      id: 0,
+                      motivo: _reasonEC.text,
+                    );
+                    context.read<ExpenseCubit>().saveReason(request);
+                  }
+                },
+                showProgress: isLoadingState,
               );
-            }
-          },
-          builder: (context, state) {
-            final bool isLoadingState = state is ExpenseLoadingState;
-            return AppButton(
-              key: const Key('save-account'),
-              text: 'Salvar motivo',
-              onPressed: () {
-                final formValid = _formKey.currentState?.validate() ?? false;
-                if (formValid) {
-                  final request = ReasonEntity(
-                    id: 0,
-                    motivo: _reasonEC.text,
-                  );
-                  context.read<ExpenseCubit>().saveReason(request);
-                }
-              },
-              showProgress: isLoadingState,
-            );
-          },
-        ),
-      ],
+            },
+          ),
+        ],
+      ),
     );
   }
 
   _saveLocal() {
-    return Column(
-      children: [
-        DentrodobolsoTextFormField(
-          label: 'Local',
-          controller: _localEC,
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        BlocConsumer<ExpenseCubit, ExpenseState>(
-          listener: (context, state) {
-            if (state is SaveLocalSuccessState) {
-              showDialog(
-                context: context,
-                builder: (_) => const _SuccessDialogWidget(
-                  mensage: 'Local inserido com sucesso',
-                  question: 'Deseja inserir mais?',
-                ),
-              );
-            }
-            if (state is ExpenseErrorState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    state.errorMessage,
+    return Form(
+      key: _formKeyLocal,
+      child: Column(
+        children: [
+          DentrodobolsoTextFormField(
+            label: 'Local',
+            controller: _localEC,
+            validator: Validatorless.required('Campo obrigatório'),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          BlocConsumer<ExpenseCubit, ExpenseState>(
+            listener: (context, state) {
+              if (state is SaveLocalSuccessState) {
+                showDialog(
+                  context: context,
+                  builder: (_) => const _SuccessDialogWidget(
+                    mensage: 'Local inserido com sucesso',
+                    question: 'Deseja inserir mais?',
                   ),
-                ),
+                );
+              }
+              if (state is ExpenseErrorState) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      state.errorMessage,
+                    ),
+                  ),
+                );
+              }
+            },
+            builder: (context, state) {
+              final bool isLoadingState = state is ExpenseLoadingState;
+              return AppButton(
+                key: const Key('save-account'),
+                text: 'Salvar local',
+                onPressed: () {
+                  final formValid =
+                      _formKeyLocal.currentState?.validate() ?? false;
+                  if (formValid) {
+                    final request = LocalEntity(
+                      id: 0,
+                      local: _localEC.text,
+                    );
+                    context.read<ExpenseCubit>().saveLocal(request);
+                  }
+                },
+                showProgress: isLoadingState,
               );
-            }
-          },
-          builder: (context, state) {
-            final bool isLoadingState = state is ExpenseLoadingState;
-            return AppButton(
-              key: const Key('save-account'),
-              text: 'Salvar local',
-              onPressed: () {
-                final formValid = _formKey.currentState?.validate() ?? false;
-                if (formValid) {
-                  final request = LocalEntity(
-                    id: 0,
-                    local: _localEC.text,
-                  );
-                  context.read<ExpenseCubit>().saveLocal(request);
-                }
-              },
-              showProgress: isLoadingState,
-            );
-          },
-        ),
-      ],
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -553,8 +569,7 @@ class _SuccessDialogWidget extends StatelessWidget {
             color: context.red,
             width: 110,
             onTap: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.of(context).popUntil((route) => route.isFirst);
             }),
       ],
     );
