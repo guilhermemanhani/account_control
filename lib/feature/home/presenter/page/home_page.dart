@@ -79,6 +79,13 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: PieChart(
+                          dataMap: state.expenseByLocalEntryEntity.isEmpty
+                              ? const {
+                                  'Sem dados': 1,
+                                }
+                              : state.expenseByLocalEntryEntity,
+                          chartType: ChartType.ring,
+                          centerText: 'Saídas',
                           chartValuesOptions: const ChartValuesOptions(
                             showChartValueBackground: true,
                             showChartValues: true,
@@ -87,13 +94,6 @@ class _HomePageState extends State<HomePage> {
                             showChartValuesInPercentage: true,
                             showChartValuesOutside: false,
                           ),
-                          dataMap: state.expenseByLocalEntryEntity.isEmpty
-                              ? const {
-                                  'Sem dados': 1,
-                                }
-                              : state.expenseByLocalEntryEntity,
-                          chartType: ChartType.ring,
-                          centerText: 'Entradas',
                         ),
                       ),
                     ],

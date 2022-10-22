@@ -151,57 +151,55 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                   const SizedBox(
                     height: 16,
                   ),
-                  BlocConsumer<SaveAccountCubit, SaveAccountState>(
-                    listener: (context, state) {
-                      if (state is SaveAccountSuccessState) {
-                        showDialog(
-                          context: context,
-                          builder: (_) => const _SuccessDialogWidget(
-                            mensage: 'Conta inserida com sucesso',
-                            question: 'Deseja inserir outro dado?',
-                          ),
-                        );
-                      }
-                      if (state is SaveAccountErrorState) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              state.errorMessage,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    builder: (context, state) {
-                      final bool isLoadingState =
-                          state is SaveAccountLoadingState;
-                      return AppButton(
-                        key: const Key('save-account'),
-                        text: 'Salvar conta',
-                        onPressed: () {
-                          final formValid =
-                              _formKey.currentState?.validate() ?? false;
-                          if (formValid) {
-                            final request = SaveAccountEntity(
-                              conta: int.parse(_numAccountEC.text),
-                              id: 0,
-                              idbanco: _bankSelectedIndex!,
-                              saldo: _controllerMoneyAccount.numberValue,
-                            );
-                            context
-                                .read<SaveAccountCubit>()
-                                .saveAccount(request);
-                          }
-                        },
-                        showProgress: isLoadingState,
-                      );
-                    },
-                  ),
                 ],
               ),
             ),
           ),
         ),
+      ),
+      floatingActionButton: BlocConsumer<SaveAccountCubit, SaveAccountState>(
+        listener: (context, state) {
+          if (state is SaveAccountSuccessState) {
+            showDialog(
+              context: context,
+              builder: (_) => const _SuccessDialogWidget(
+                mensage: 'Conta inserida com sucesso',
+                question: 'Deseja inserir outro dado?',
+              ),
+            );
+          }
+          if (state is SaveAccountErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  state.errorMessage,
+                ),
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          final bool isLoadingState = state is SaveAccountLoadingState;
+          return FloatingActionButton(
+            onPressed: () {
+              final formValid = _formKey.currentState?.validate() ?? false;
+              if (formValid) {
+                final request = SaveAccountEntity(
+                  conta: int.parse(_numAccountEC.text),
+                  id: 0,
+                  idbanco: _bankSelectedIndex!,
+                  saldo: _controllerMoneyAccount.numberValue,
+                );
+                context.read<SaveAccountCubit>().saveAccount(request);
+              }
+            },
+            child: isLoadingState
+                ? const CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : const Icon(Icons.payment),
+          );
+        },
       ),
     );
   }
