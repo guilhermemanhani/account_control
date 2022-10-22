@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/entities/budget_entity.dart';
+import '../../../domain/entities/budget_entity.dart';
 import '../widgets/widgets.dart';
 
 class ContainerBudget extends StatelessWidget {

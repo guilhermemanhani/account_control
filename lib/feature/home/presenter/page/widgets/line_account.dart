@@ -1,5 +1,8 @@
+import 'package:account_control/core/service_locator/service_locator.dart';
+import 'package:account_control/feature/detail/presenter/presenter.dart';
 import 'package:account_control/feature/home/domain/entities/account_info_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class LineAccount extends StatefulWidget {
@@ -29,9 +32,15 @@ class _LineAccountState extends State<LineAccount> {
             padding: const EdgeInsets.only(bottom: 12),
             child: InkWell(
               onTap: () {
-                // todo implement onTap
-                // Navigator.pushNamed(context, '/home/detail/',
-                //     arguments: account.id);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => BlocProvider(
+                      create: (context) =>
+                          getIt<DetailCubit>()..getExpensesByAccountPeriod(),
+                      child: const DetailPage(),
+                    ),
+                  ),
+                );
               },
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 8),

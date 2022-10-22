@@ -2,6 +2,10 @@ import 'package:get_it/get_it.dart';
 
 import '../../core/database/database.dart';
 import '../../feature/account/account.dart';
+import '../../feature/detail/domain/domain.dart';
+import '../../feature/detail/external/external.dart';
+import '../../feature/detail/infra/infra.dart';
+import '../../feature/detail/presenter/presenter.dart';
 import '../../feature/expense/domain/repositories/repositories.dart';
 import '../../feature/expense/domain/usecases/usecases.dart';
 import '../../feature/expense/external/datasource/datasource.dart';
@@ -184,16 +188,6 @@ void initServiceLocator() {
     ),
   );
 
-  // ? account save
-
-  // getIt.registerSingleton<AccountDatasource>(
-  //   AccountDatasourceImpl(
-  //     sqliteConnectionFactory: getIt(),
-  //   ),
-  // );
-  // AccountDatasource
-  // AccountDatasource
-
   // ? expense save
 
   getIt.registerSingleton<SaveExpenseDatasource>(
@@ -291,6 +285,33 @@ void initServiceLocator() {
       usecase: getIt(),
       getBankUsecase: getIt(),
       saveBankUsecase: getIt(),
+    ),
+  );
+
+  // ! detail
+
+  getIt.registerSingleton<ExpenseByAccountperiodDatasource>(
+    ExpenseByAccountperiodDatasourceImpl(
+      sqliteConnectionFactory: getIt(),
+    ),
+  );
+
+  // aqui
+  getIt.registerSingleton<ExpenseByAccountperiodRepository>(
+    ExpenseByAccountperiodRepositoryImpl(
+      datasource: getIt(),
+    ),
+  );
+
+  getIt.registerSingleton<GetExpenseByAccountperiodUsecase>(
+    GetExpenseByAccountperiodUsecaseImpl(
+      repository: getIt(),
+    ),
+  );
+
+  getIt.registerFactory<DetailCubit>(
+    () => DetailCubit(
+      getExpenseByAccountperiodUsecase: getIt(),
     ),
   );
 }

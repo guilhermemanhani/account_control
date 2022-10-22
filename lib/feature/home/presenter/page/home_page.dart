@@ -6,7 +6,7 @@ import '../../../../core/service_locator/service_locator.dart';
 import '../../../expense/presenter/cubits/cubits.dart';
 import '../../../expense/presenter/page/expense_page.dart';
 import '../cubits/cubits.dart';
-import '../widgets/widgets.dart';
+import 'widgets/widgets.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

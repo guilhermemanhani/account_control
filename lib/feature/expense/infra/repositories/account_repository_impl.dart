@@ -8,6 +8,7 @@ class AccountRepositoryImpl implements AccountRepository {
   AccountRepositoryImpl({
     required AccountDatasource accountDatasource,
   }) : _accountDatasource = accountDatasource;
+
   @override
   Future<List<AccountEntity>> getAccounts() async {
     try {
