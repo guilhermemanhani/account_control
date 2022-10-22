@@ -16,7 +16,7 @@ class SaveLocalDatasourceImpl implements SaveLocalDatasource {
       'local',
       {
         'id': null,
-        'nome': local.local,
+        'local': local.local,
       },
     );
     return true;

@@ -31,9 +31,9 @@ class SaveExpenseRepositoryImpl implements SaveExpenseRepository {
         tpagamento: expense.tpagamento,
       );
       if (expense.tpagamento == 0) {
-        balanceAtt = account.saldo - expense.valor;
+        balanceAtt = account.saldo - expense.valor * 100;
       } else {
-        balanceAtt = account.saldo + expense.valor;
+        balanceAtt = account.saldo + expense.valor * 100;
       }
       return await _saveExpenseDatasource.saveExpense(
           expense: expenseEntity, balanceAtt: balanceAtt);
