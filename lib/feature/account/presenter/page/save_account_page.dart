@@ -147,7 +147,10 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                   SizedBox(
                     height: _showBankEC ? 16 : 0,
                   ),
-                  _showBankEC ? _saveBank() : const SizedBox(),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: _showBankEC ? _saveBank() : const SizedBox(),
+                  ),
                   const SizedBox(
                     height: 16,
                   ),

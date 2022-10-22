@@ -191,7 +191,10 @@ class _ExpensePageState extends State<ExpensePage> {
                   SizedBox(
                     height: _showLocalEC ? 16 : 0,
                   ),
-                  _showLocalEC ? _saveLocal() : const SizedBox(),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: _showLocalEC ? _saveLocal() : const SizedBox(),
+                  ),
                   const SizedBox(
                     height: 16,
                   ),
@@ -338,7 +341,10 @@ class _ExpensePageState extends State<ExpensePage> {
                   SizedBox(
                     height: _showReasonEC ? 16 : 0,
                   ),
-                  _showReasonEC ? _saveReason() : const SizedBox(),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: _showReasonEC ? _saveReason() : const SizedBox(),
+                  ),
                 ],
               ),
             ),
