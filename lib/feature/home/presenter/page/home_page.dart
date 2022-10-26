@@ -119,8 +119,8 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
+        onPressed: () async {
+          await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => BlocProvider(
                 create: (context) => getIt<ExpenseCubit>()..loadScreen(),
@@ -128,6 +128,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           );
+          if (!mounted) return;
+          context.read<HomeAppCubit>().loadAccounts();
         },
         child: const Icon(Icons.payment),
       ),

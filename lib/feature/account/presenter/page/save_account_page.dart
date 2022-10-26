@@ -255,6 +255,7 @@ class _SaveAccountPageState extends State<SaveAccountPage> {
                       instituicao: _bankEC.text,
                     );
                     context.read<SaveAccountCubit>().saveBank(request);
+                    _bankEC.clear();
                   }
                 },
                 showProgress: isLoadingState,
@@ -312,13 +313,12 @@ class _SuccessDialogWidget extends StatelessWidget {
           width: 8,
         ),
         TextIconButton(
-            icon: Icons.cancel_outlined,
-            title: 'Não',
-            color: context.red,
-            width: 110,
-            onTap: () {
-              Navigator.of(context).popUntil((route) => route.isFirst);
-            }),
+          icon: Icons.cancel_outlined,
+          title: 'Não',
+          color: context.red,
+          width: 110,
+          onTap: () => Navigator.of(context).popUntil((route) => route.isFirst),
+        ),
       ],
     );
   }

@@ -1,6 +1,8 @@
 import 'package:account_control/core/database/sqlite_migration_factory.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+// ignore: depend_on_referenced_packages
 import 'package:synchronized/synchronized.dart';
 
 class SqliteConnectionFactory {
