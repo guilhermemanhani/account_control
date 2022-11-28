@@ -17,7 +17,7 @@ class ExpenseByAccountperiodDatasourceImpl
     required DateTime end,
   }) async {
     final startFilter =
-        DateTime(start.year, start.month - 1, start.day, 0, 0, 0);
+        DateTime(start.year, start.month - 2, start.day, 0, 0, 0);
     final endFilter = DateTime(end.year, end.month, end.day, 23, 59, 59);
     final conn = await _sqliteConnectionFactory.openConnection();
     final result = await conn.rawQuery(
