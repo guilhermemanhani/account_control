@@ -15,6 +15,8 @@ class DetailCubit extends Cubit<DetailState> {
   Future<void> getExpensesByAccountPeriod() async {
     emit(const DetailStateLoadingState());
     try {
+      // ! start com menos um mes no start
+      // ! metodo q pega o mes da tela
       final List<ExpenseEntity> expenses =
           await _getExpenseByAccountperiodUsecase(
         idAccount: 1,
