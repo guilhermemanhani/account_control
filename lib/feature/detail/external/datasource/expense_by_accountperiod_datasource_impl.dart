@@ -31,8 +31,8 @@ class ExpenseByAccountperiodDatasourceImpl
       ''',
       [
         idAccount,
-        startFilter.toIso8601String(),
-        endFilter.toIso8601String(),
+        start.toIso8601String(),
+        end.toIso8601String(),
       ],
     );
 

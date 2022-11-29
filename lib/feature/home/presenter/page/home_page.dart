@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                                 }
                               : state.expenseByLocalEntryEntity,
                           chartType: ChartType.ring,
-                          centerText: 'Saídas',
+                          centerText: 'Entradas',
                           chartValuesOptions: const ChartValuesOptions(
                             showChartValueBackground: true,
                             showChartValues: true,

@@ -17,11 +17,13 @@ class DetailCubit extends Cubit<DetailState> {
     try {
       // ! start com menos um mes no start
       // ! metodo q pega o mes da tela
+      final startDay = DateTime.now();
       final List<ExpenseEntity> expenses =
           await _getExpenseByAccountperiodUsecase(
         idAccount: 1,
-        start: DateTime.now(),
-        end: DateTime.now(),
+        start:
+            DateTime(startDay.year, startDay.month - 2, startDay.day, 0, 0, 0),
+        end: startDay,
       );
       emit(DetailStateLoadedState(expenses: expenses));
     } catch (e) {
